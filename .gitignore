@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+chroma_db/
+quizgenius_data/
+.streamlit/secrets.toml
+*.egg-info/
+dist/
+build/
