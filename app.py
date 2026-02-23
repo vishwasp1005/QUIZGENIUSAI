@@ -383,18 +383,70 @@ div[data-testid="stRadio"]>div{gap:.375rem!important;flex-direction:column!impor
 div[data-testid="stRadio"]>div>label{background:#fff!important;padding:.8rem 1.125rem!important;
   border-radius:var(--r2)!important;border:1.5px solid var(--bd)!important;
   font-size:.875rem!important;font-weight:500!important;width:100%!important;
-  margin:0!important;transition:all .15s!important;cursor:pointer!important;}
+  margin:0!important;transition:all .15s!important;cursor:pointer!important;
+  color:#374151!important;}
+div[data-testid="stRadio"]>div>label p,
+div[data-testid="stRadio"]>div>label div,
+div[data-testid="stRadio"]>div>label span{color:#374151!important;}
 div[data-testid="stRadio"]>div>label:hover{border-color:var(--or)!important;
   background:var(--ol)!important;color:var(--or)!important;}
+div[data-testid="stRadio"]>div>label:hover p,
+div[data-testid="stRadio"]>div>label:hover span{color:var(--or)!important;}
 div[data-testid="stRadio"]>div>label:has(input:checked){border-color:var(--or)!important;
   background:var(--ol)!important;color:var(--or)!important;font-weight:700!important;
   box-shadow:0 0 0 3px rgba(232,76,30,.08)!important;}
+div[data-testid="stRadio"]>div>label:has(input:checked) p,
+div[data-testid="stRadio"]>div>label:has(input:checked) span{color:var(--or)!important;}
 div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
+/* SMOOTH PAGE FADE TRANSITION */
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+[data-testid="stMainBlockContainer"]>div>div{animation:fadeIn .25s ease both;}
+
+/* GLOBAL TEXT VISIBILITY — fix any invisible text across the app */
+.stApp *{color:inherit;}
+p,span,div,label,li,td,th,h1,h2,h3,h4,h5,h6{color:var(--tx2);}
+.stMarkdown p,.stMarkdown span{color:var(--tx2)!important;}
+/* Slider */
+[data-testid="stSlider"] label{color:var(--tx2)!important;font-weight:600!important;}
+[data-testid="stSlider"] [data-testid="stTickBarMin"],
+[data-testid="stSlider"] [data-testid="stTickBarMax"]{color:var(--tx4)!important;}
+/* Caption / small text */
+.stCaption,.stCaption p{color:var(--tx3)!important;font-size:.75rem!important;}
+/* Expander */
+[data-testid="stExpander"] summary span{color:var(--tx)!important;font-weight:600!important;}
+[data-testid="stExpander"] summary:hover span{color:var(--or)!important;}
+[data-testid="stExpander"] [data-testid="stMarkdownContainer"] p{color:var(--tx2)!important;}
+/* Multiselect */
+[data-testid="stMultiSelect"] label{color:var(--tx2)!important;font-weight:600!important;}
+[data-testid="stMultiSelect"] [data-baseweb="tag"]{background:var(--ol)!important;
+  border:1px solid var(--om)!important;}
+[data-testid="stMultiSelect"] [data-baseweb="tag"] span{color:var(--or)!important;}
+/* Checkbox */
+[data-testid="stCheckbox"] label p{color:var(--tx2)!important;}
+/* Progress bar text */
+[data-testid="stProgress"] p{color:var(--tx3)!important;}
+/* Spinner text */
+[data-testid="stSpinner"] p{color:var(--tx2)!important;}
+/* Code blocks */
+.stCodeBlock code{color:#d63031!important;}
+
 /* MISC */
 .stSelectbox>div>div{background:#fff!important;border:1.5px solid var(--bd)!important;
-  border-radius:var(--r2)!important;}
-[data-testid="stFileUploader"]{background:#fff;border:2px dashed var(--bd2);border-radius:var(--r);}
-[data-testid="stFileUploader"]:hover{border-color:var(--or);}
+  border-radius:var(--r2)!important;color:var(--tx)!important;}
+.stSelectbox label{color:var(--tx2)!important;font-size:.8rem!important;font-weight:600!important;}
+/* FILE UPLOADER — fix dark bg, ensure text visibility */
+[data-testid="stFileUploader"]{background:#fff!important;border:2px dashed var(--bd2)!important;
+  border-radius:var(--r)!important;padding:.5rem!important;}
+[data-testid="stFileUploader"]:hover{border-color:var(--or)!important;}
+[data-testid="stFileUploaderDropzone"]{background:#fff!important;}
+[data-testid="stFileUploaderDropzone"] *{color:var(--tx2)!important;}
+[data-testid="stFileUploaderDropzone"] small{color:var(--tx3)!important;}
+[data-testid="stFileUploader"] button{background:var(--or)!important;color:#fff!important;
+  border:none!important;border-radius:var(--r2)!important;font-weight:600!important;}
+section[data-testid="stFileUploadDropzone"]{background:#fff!important;}
+section[data-testid="stFileUploadDropzone"] div,
+section[data-testid="stFileUploadDropzone"] span,
+section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 [data-testid="stForm"]{background:#fff!important;border:1.5px solid var(--bd)!important;
   border-radius:var(--r)!important;box-shadow:var(--sh)!important;padding:1.5rem!important;}
 .stSuccess>div{background:#f0fdf4!important;border:1px solid #bbf7d0!important;
@@ -415,16 +467,17 @@ div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
   background:#fff!important;border-bottom:1px solid var(--bd)!important;
   box-shadow:0 1px 8px rgba(0,0,0,.06)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]{
-  align-items:center!important;padding:0 2rem!important;min-height:64px!important;
+  align-items:center!important;padding:0 1.5rem!important;min-height:64px!important;
   gap:0!important;max-width:1400px!important;margin:0 auto!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]{
   display:flex!important;align-items:center!important;
   padding-top:0!important;padding-bottom:0!important;flex-shrink:0!important;}
+/* Nav link buttons */
 [data-testid="stAppViewBlockContainer"]>div:first-child button{
   font-family:'Inter',sans-serif!important;font-size:.82rem!important;font-weight:500!important;
   background:transparent!important;color:var(--tx3)!important;border:none!important;
   border-radius:0!important;box-shadow:none!important;height:64px!important;
-  padding:0 14px!important;white-space:nowrap!important;width:auto!important;
+  padding:0 10px!important;white-space:nowrap!important;width:auto!important;
   border-bottom:2px solid transparent!important;transition:color .15s,border-color .15s!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child button:hover{
   color:var(--tx)!important;background:transparent!important;transform:none!important;
@@ -434,11 +487,15 @@ div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
   border-bottom:2px solid var(--or)!important;background:transparent!important;box-shadow:none!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* hide real logout */
+/* hide LOGOUT_TRIGGER button visually but keep it functional */
 [data-testid="stAppViewBlockContainer"]>div:first-child
   [data-testid="column"]:last-child [data-testid="stButton"]{
   position:absolute!important;width:1px!important;height:1px!important;
   overflow:hidden!important;opacity:0!important;pointer-events:none!important;clip:rect(0,0,0,0)!important;}
+/* Generate page columns — align tops */
+.gl>[data-testid="column"]{align-self:start!important;}
+/* PDF banner Change button — vertically centered */
+[data-testid="stButton"]>button{vertical-align:middle!important;}
 /* LAYOUTS */
 .pw{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
@@ -742,7 +799,7 @@ is_guest = uname == "__guest__"
 dname    = "Guest" if is_guest else uname.capitalize()
 init     = dname[0].upper()
 
-nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.2,.72,.95,.68,1.05,.68,2.6,0.01])
+nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.0,.62,.80,.58,.92,.58,2.2,0.01])
 with nb0:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;">
       <div style="width:32px;height:32px;border-radius:8px;background:#e84c1e;
@@ -752,34 +809,38 @@ with nb0:
         QuizGenius <span style="color:#e84c1e;">AI</span></div>
     </div>""", unsafe_allow_html=True)
 with nb1:
-    if st.button("Home",      key="n_home",  type="primary" if cp=="Home"                         else "secondary"): go("Home")
+    if st.button("Home",      key="n_home",  type="primary" if cp=="Home"                        else "secondary"): go("Home")
 with nb2:
-    if st.button("Generate",  key="n_gen",   type="primary" if cp=="Generate"                     else "secondary"): go("Generate")
+    if st.button("Generate",  key="n_gen",   type="primary" if cp=="Generate"                    else "secondary"): go("Generate")
 with nb3:
-    if st.button("Study",     key="n_study", type="primary" if cp in("Study","Flashcard","Test")  else "secondary", disabled=not gen_ok): go("Study")
+    if st.button("Study",     key="n_study", type="primary" if cp in("Study","Flashcard","Test") else "secondary", disabled=not gen_ok): go("Study")
 with nb4:
-    if st.button("Dashboard", key="n_dash",  type="primary" if cp=="Dashboard"                    else "secondary"): go("Dashboard")
+    if st.button("Dashboard", key="n_dash",  type="primary" if cp=="Dashboard"                   else "secondary"): go("Dashboard")
 with nb5:
-    if st.button("About",     key="n_about", type="primary" if cp=="About"                        else "secondary"): go("About")
+    if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary"): go("About")
 with nb6:
-    st.markdown(f"""<div style="display:flex;align-items:center;gap:8px;
+    # Sign out text triggers the hidden 🚪 button via JS key match on data-testid
+    st.markdown(f"""<div style="display:flex;align-items:center;gap:10px;
       justify-content:flex-end;height:64px;width:100%;">
-      <div style="background:#e84c1e;color:#fff;border-radius:999px;
-        padding:.3rem .875rem;font-size:.72rem;font-weight:700;white-space:nowrap;">⬆ Upgrade Pro</div>
-      <div style="width:1px;height:20px;background:#e5e7eb;margin:0 4px;"></div>
       <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
         display:flex;align-items:center;justify-content:center;
-        font-size:.75rem;font-weight:800;color:#fff;">{init}</div>
-      <span style="font-size:.8rem;font-weight:600;color:#374151;white-space:nowrap;">{S(dname)}</span>
-      <div style="width:1px;height:16px;background:#e5e7eb;margin:0 2px;"></div>
-      <span style="font-size:.72rem;font-weight:600;color:#9ca3af;cursor:pointer;white-space:nowrap;"
-        onmouseenter="this.style.color='#e84c1e'" onmouseleave="this.style.color='#9ca3af'"
-        onclick="(function(){{var b=window.parent.document.querySelectorAll('button');
-          for(var i=0;i<b.length;i++){{if(b[i].innerText.trim()==='🚪'){{b[i].click();break;}}}}}})()">
-        Sign out</span>
+        font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
+      <span style="font-size:.82rem;font-weight:600;color:#374151;white-space:nowrap;">{S(dname)}</span>
+      <div style="width:1px;height:18px;background:#e5e7eb;flex-shrink:0;"></div>
+      <span id="signout-btn"
+        style="font-size:.78rem;font-weight:600;color:#9ca3af;cursor:pointer;
+          white-space:nowrap;transition:color .15s;padding:4px 2px;"
+        onmouseenter="this.style.color='#e84c1e';this.style.textDecoration='underline'"
+        onmouseleave="this.style.color='#9ca3af';this.style.textDecoration='none'"
+        onclick="(function(){{
+          var btns=window.parent.document.querySelectorAll('button');
+          for(var i=0;i<btns.length;i++){{
+            if(btns[i].innerText.trim()==='LOGOUT_TRIGGER'){{btns[i].click();return;}}
+          }}
+        }})()">Sign out</span>
     </div>""", unsafe_allow_html=True)
 with nb7:
-    if st.button("🚪", key="n_logout", type="secondary"):
+    if st.button("LOGOUT_TRIGGER", key="n_logout", type="secondary"):
         for k in list(st.session_state.keys()): del st.session_state[k]
         st.rerun()
 
@@ -847,11 +908,15 @@ if cp == "Home":
       </div><div>{mockup}</div>
     </div></div>""", unsafe_allow_html=True)
 
-    hb1,hb2,hb3 = st.columns([1,1.4,1.1])
+    # CTA buttons — full width, centered, equal
+    st.markdown("""<div style="max-width:1280px;margin:0 auto;padding:0 2rem;">""",
+                unsafe_allow_html=True)
+    hb1, hb2 = st.columns(2, gap="medium")
+    with hb1:
+        if st.button("⚡  Start Generating Now", key="hcta",  type="primary",  use_container_width=True): go("Generate")
     with hb2:
-        if st.button("⚡  Start Generating Now", key="hcta", type="primary", use_container_width=True): go("Generate")
-    with hb3:
-        if st.button("📊  My Dashboard", key="hdash", type="secondary", use_container_width=True): go("Dashboard")
+        if st.button("📊  My Dashboard",          key="hdash", type="secondary", use_container_width=True): go("Dashboard")
+    st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(f"""<div class="sb"><div class="si">
       <div class="si-c"><span class="si-n">{tqg if tqg else "10K+"}</span><span class="si-l">Questions Generated</span></div>
@@ -949,13 +1014,13 @@ if cp == "Home":
 # GENERATE PAGE
 # ════════════════════════════════════════════════════════════════
 elif cp == "Generate":
-    st.markdown('<div class="fw" style="padding-top:2rem;">', unsafe_allow_html=True)
-    st.markdown("""<div style="margin-bottom:1.5rem;">
-      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
-        letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">Workspace › AI Creation</div>
-      <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">
+    st.markdown('<div class="fw" style="padding-top:1rem;">', unsafe_allow_html=True)
+    st.markdown("""<div style="margin-bottom:1.25rem;">
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;
+        letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Workspace › AI Creation</div>
+      <div style="font-size:1.6rem;font-weight:800;color:#111;letter-spacing:-.03em;">
         Generate Study Material</div>
-      <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
+      <div style="font-size:.875rem;color:#6b7280;margin-top:.2rem;">
         Transform your documents into high-quality assessments instantly.</div>
     </div>""", unsafe_allow_html=True)
 
@@ -1003,8 +1068,12 @@ elif cp == "Generate":
                       AI suggests: <span style="color:{dcol};font-weight:700;">{dd}</span></div>
                   </div></div>""", unsafe_allow_html=True)
             with pb2:
+                # vertically center the button with the PDF banner
+                st.markdown("""<div style="display:flex;align-items:center;
+                  height:100%;min-height:64px;">""", unsafe_allow_html=True)
                 if st.button("Change", key="chg_pdf", type="secondary", use_container_width=True):
                     clear_pdf(); st.rerun()
+                st.markdown("</div>", unsafe_allow_html=True)
 
             s1,s2,s3,s4 = st.columns(4)
             for col,lbl,val in [(s1,"Words",f"{wc:,}"),(s2,"Characters",f"{len(pdf_text):,}"),
@@ -1160,7 +1229,7 @@ elif cp == "Generate":
 
     # RIGHT PANEL — Live Preview
     with right_col:
-        st.markdown("""<div style="position:sticky;top:80px;">""", unsafe_allow_html=True)
+        st.markdown("""<div style="position:sticky;top:68px;margin-top:0;">""", unsafe_allow_html=True)
         st.markdown("""<div class="gp">
           <div class="gp-hd">
             <span class="gp-ti">🔍 Live Preview</span>
@@ -1272,7 +1341,7 @@ elif cp in ("Study","Flashcard","Test"):
         if st.button("⚡ Regenerate", type="primary"): go("Generate")
         st.stop()
 
-    st.markdown('<div class="fw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="fw" style="padding-top:1rem;">', unsafe_allow_html=True)
 
     tc1,tc2,tc3 = st.columns(3)
     with tc1:
@@ -1620,7 +1689,7 @@ elif cp == "Dashboard":
     best=max((s["pct"] for s in sh),default=0)
     un=st.session_state.current_user or "User"
 
-    st.markdown('<div class="pw">', unsafe_allow_html=True)
+    st.markdown('<div class="pw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
     greet=f"Welcome back, {un.capitalize()}!" if un!="__guest__" else "Welcome, Guest!"
     st.markdown(f"""<div style="margin-bottom:2rem;">
       <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
@@ -1734,7 +1803,7 @@ elif cp == "Dashboard":
 # ABOUT
 # ════════════════════════════════════════════════════════════════
 elif cp == "About":
-    st.markdown('<div class="aw">', unsafe_allow_html=True)
+    st.markdown('<div class="aw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
     st.markdown("""<div style="margin-bottom:2rem;">
       <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
         letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">QuizGenius AI › About</div>
