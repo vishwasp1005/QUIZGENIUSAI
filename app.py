@@ -513,9 +513,10 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
   [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* Hide the hidden logout trigger button */
-.hidden-logout{display:none!important;position:absolute!important;
-  pointer-events:none!important;opacity:0!important;height:0!important;overflow:hidden!important;}
+/* Hide logout checkbox — offscreen but JS-clickable (no pointer-events:none) */
+[data-testid="stAppViewBlockContainer"]>div:nth-child(2){
+  position:absolute!important;left:-9999px!important;top:-9999px!important;
+  width:0!important;height:0!important;overflow:hidden!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
 /* PDF banner Change button — vertically centered */
@@ -883,13 +884,12 @@ with nb6:
         font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
       <span style="font-size:.82rem;font-weight:600;color:#374151;
         white-space:nowrap;flex-shrink:0;">{S(dname)}</span>
-      <div id="qg-signout-icon" title="Sign out"
+      <div title="Sign out"
         onclick="(function(){{
-          var cb=window.parent.document.querySelector('input[data-testid=\\"stCheckbox\\"][aria-label=\\"_lgcb\\"]');
-          if(!cb)cb=window.parent.document.querySelector('#qg-logout-cb input');
+          var cb=window.parent.document.querySelector('input[type=checkbox][aria-label=\\"_lgcb\\"]');
           if(!cb){{var all=window.parent.document.querySelectorAll('input[type=checkbox]');
-            if(all.length)cb=all[all.length-1];}}
-          if(cb){{cb.click();}}
+            cb=all[0];}}
+          if(cb)cb.click();
         }})()"
         style="width:34px;height:34px;border-radius:8px;border:1.5px solid #e5e7eb;
           background:#fff;display:flex;align-items:center;justify-content:center;
@@ -906,11 +906,9 @@ with nb6:
       </div>
     </div>""", unsafe_allow_html=True)
 
-# ── Invisible checkbox logout ── JS clicks it → Python detects → clear session
-st.markdown('<div id="qg-logout-cb" style="position:fixed;top:-9999px;left:-9999px;'
-            'width:0;height:0;overflow:hidden;pointer-events:none;opacity:0;">', unsafe_allow_html=True)
+# Logout checkbox — rendered as 2nd child div, hidden offscreen via CSS above
+# JS clicks it → Python detects → clears session → reruns to login
 _lgcb = st.checkbox("_lgcb", key="_logout_cb", label_visibility="hidden")
-st.markdown('</div>', unsafe_allow_html=True)
 if _lgcb:
     for k in list(st.session_state.keys()): del st.session_state[k]
     st.rerun()
@@ -1087,7 +1085,7 @@ if cp == "Home":
 elif cp == "Generate":
     # White header band matching home hero start position
     st.markdown("""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
-      padding:2.5rem 2rem 1.5rem;margin-bottom:0;">
+      padding:1.5rem 2rem 1.25rem;margin-bottom:0;">
       <div style="max-width:1280px;margin:0 auto;">
         <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;
           letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Workspace › AI Creation</div>
@@ -1097,7 +1095,7 @@ elif cp == "Generate":
           Transform your documents into high-quality assessments instantly.</div>
       </div>
     </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="fw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="fw" style="padding-top:.75rem;">', unsafe_allow_html=True)
 
     left_col, right_col = st.columns([1, 0.52], gap="large")
 
@@ -1763,9 +1761,10 @@ elif cp == "Dashboard":
     tt=len(sh); avg=round(sum(s["pct"] for s in sh)/max(tt,1),1) if sh else 0
     best=max((s["pct"] for s in sh),default=0)
     un=st.session_state.current_user or "User"
+    greet=f"Welcome back, {un.capitalize()}!" if un!="__guest__" else "Welcome, Guest!"
 
     st.markdown(f"""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
-      padding:2.5rem 1.5rem 1.5rem;">
+      padding:1.5rem 1.5rem 1.25rem;">
       <div style="max-width:900px;margin:0 auto;">
         <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
           letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Your Progress › Dashboard</div>
@@ -1774,7 +1773,7 @@ elif cp == "Dashboard":
           {S(greet)} Track your study patterns and scores.</div>
       </div>
     </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="pw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="pw" style="padding-top:1rem;">', unsafe_allow_html=True)
 
     st.markdown(f"""<div class="sg">
       <div class="sc"><span class="sc-ico">📊</span><div class="sc-val">{tt}</div>
@@ -1881,7 +1880,7 @@ elif cp == "Dashboard":
 # ════════════════════════════════════════════════════════════════
 elif cp == "About":
     st.markdown("""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
-      padding:2.5rem 1.5rem 1.5rem;">
+      padding:1.5rem 1.5rem 1.25rem;">
       <div style="max-width:960px;margin:0 auto;">
         <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
           letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">QuizGenius AI › About</div>
@@ -1890,7 +1889,7 @@ elif cp == "About":
           Revolutionising learning through adaptive AI-powered assessments.</div>
       </div>
     </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="aw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="aw" style="padding-top:.75rem;">', unsafe_allow_html=True)
     cs = "background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;padding:1.875rem;margin-bottom:1.125rem;box-shadow:0 1px 4px rgba(0,0,0,.06);"
     ct2 = "font-size:.95rem;font-weight:700;color:#111;margin-bottom:.625rem;"
     cp2 = "font-size:.875rem;color:#374151;line-height:1.85;"
