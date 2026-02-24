@@ -38,10 +38,8 @@ def go(p): st.session_state.current_page=p; st.rerun()
 def hash_pw(pw): return hashlib.sha256(pw.encode()).hexdigest()
 def get_key(): return GROQ_API_KEY or st.session_state.get("groq_key_input","")
 
-# ── URL-param logout (triggered by HTML div in navbar) ───────────
-_qp = st.query_params.to_dict()
-if _qp.get("logout") == "1":
-    st.query_params.clear()
+# ── Session-state flag logout (no URL change, no page reload) ────
+if st.session_state.get("_do_logout"):
     for k in list(st.session_state.keys()): del st.session_state[k]
     st.rerun()
 
@@ -472,14 +470,33 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child{
   position:sticky!important;top:0!important;z-index:9999!important;
   background:#fff!important;border-bottom:1px solid var(--bd)!important;
-  box-shadow:0 1px 8px rgba(0,0,0,.06)!important;}
+  box-shadow:0 1px 8px rgba(0,0,0,.06)!important;
+  height:64px!important;overflow:visible!important;}
+/* Force EVERY intermediate Streamlit wrapper inside navbar to be a flex row centered at 64px */
+[data-testid="stAppViewBlockContainer"]>div:first-child>div,
+[data-testid="stAppViewBlockContainer"]>div:first-child>div>div,
+[data-testid="stAppViewBlockContainer"]>div:first-child>div>div>div{
+  height:64px!important;padding:0!important;margin:0!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]{
-  align-items:center!important;padding:0 1.5rem!important;min-height:64px!important;
-  gap:0!important;max-width:1400px!important;margin:0 auto!important;}
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  align-items:center!important;justify-content:flex-start!important;
+  padding:0 1.5rem!important;height:64px!important;min-height:64px!important;
+  gap:0!important;margin:0 auto!important;max-width:1400px!important;
+  overflow:visible!important;}
+/* Each column: full height flex, vertically centred */
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]{
-  display:flex!important;align-items:center!important;
-  padding-top:0!important;padding-bottom:0!important;flex-shrink:0!important;}
-/* Nav link buttons — transparent tab style */
+  display:flex!important;flex-direction:row!important;align-items:center!important;
+  height:64px!important;min-height:64px!important;
+  padding:0!important;margin:0!important;flex-shrink:0!important;overflow:visible!important;}
+/* Every Streamlit wrapper INSIDE columns: propagate height + centre */
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]>div,
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]>div>div,
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stElementContainer"],
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stMarkdownContainer"],
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stButton"]{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  height:64px!important;width:100%!important;padding:0!important;margin:0!important;}
+/* Nav link buttons — transparent tab underline style */
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
   [data-testid="column"]:not(:first-child):not(:last-child) button{
   font-family:'Inter',sans-serif!important;font-size:.82rem!important;font-weight:500!important;
@@ -498,15 +515,20 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
   [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
+/* Hide the hidden logout trigger button */
+.hidden-logout{display:none!important;position:absolute!important;
+  pointer-events:none!important;opacity:0!important;height:0!important;overflow:hidden!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
 /* PDF banner Change button — vertically centered */
 [data-testid="stButton"]>button{vertical-align:middle!important;}
-/* Kill Streamlit's injected gap between navbar and first content block */
+/* Kill ALL Streamlit-injected top spacing on the main content area */
 [data-testid="stAppViewBlockContainer"]>div:not(:first-child){
   margin-top:0!important;padding-top:0!important;}
-/* LAYOUTS — zero top padding, content flush with navbar bottom */
-.pw{max-width:900px;margin:0 auto;padding:.75rem 1.5rem 5rem;}
+[data-testid="stMainBlockContainer"]{padding-top:0!important;margin-top:0!important;}
+section[data-testid="stMain"]>div{padding-top:0!important;}
+/* LAYOUTS */
+.pw{max-width:900px;margin:0 auto;padding:.5rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
 .badge{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.07em;padding:2px 9px;border-radius:999px;}
@@ -821,7 +843,7 @@ is_guest = uname == "__guest__"
 dname    = "Guest" if is_guest else uname.capitalize()
 init     = dname[0].upper()
 
-# ── shared logo HTML (reused in navbar + login) ──────────────────
+# ── shared logo HTML ─────────────────────────────────────────────
 Q_LOGO = """<div style="width:{sz}px;height:{sz}px;border-radius:{r}px;background:#e84c1e;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
   box-shadow:0 4px 14px rgba(232,76,30,.35);">
@@ -832,17 +854,17 @@ Q_LOGO = """<div style="width:{sz}px;height:{sz}px;border-radius:{r}px;backgroun
 def q_logo(sz=32, r=9, fs="1rem", ltr="Q"):
     return Q_LOGO.format(sz=sz, r=r, fs=fs, ltr=ltr)
 
-# ── door SVG removed — logout handled via URL param ──────────────
-
-nb0,nb1,nb2,nb3,nb4,nb5,nb6 = st.columns([2.2, .60, .78, .56, .90, .56, 2.0])
+# ── NAVBAR — 6 columns, all items on one horizontal line ─────────
+nb0,nb1,nb2,nb3,nb4,nb5,nb6 = st.columns([2.0, .58, .76, .54, .88, .54, 1.9])
 with nb0:
-    st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;">
+    st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;
+      height:64px;white-space:nowrap;flex-shrink:0;">
       {q_logo(32, 9, "1rem", "Q")}
-      <div style="line-height:1.1;">
-        <div style="font-size:.88rem;font-weight:800;color:#111;letter-spacing:-.02em;">
-          QuizGenius <span style="color:#e84c1e;">AI</span></div>
-        <div style="font-size:.52rem;font-weight:600;color:#9ca3af;
-          text-transform:uppercase;letter-spacing:.1em;">AI Study Platform</div>
+      <div style="line-height:1.15;">
+        <div style="font-size:.88rem;font-weight:800;color:#111;letter-spacing:-.02em;
+          white-space:nowrap;">QuizGenius <span style="color:#e84c1e;">AI</span></div>
+        <div style="font-size:.5rem;font-weight:600;color:#9ca3af;
+          text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;">AI Study Platform</div>
       </div>
     </div>""", unsafe_allow_html=True)
 with nb1:
@@ -856,18 +878,29 @@ with nb4:
 with nb5:
     if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary"): go("About")
 with nb6:
-    # Avatar + name + pure HTML sign-out icon — no st.button, no CSS fight
-    st.markdown(f"""<div style="display:flex;align-items:center;gap:10px;
-      justify-content:flex-end;height:64px;width:100%;padding-right:8px;">
+    # Avatar + name + pure-HTML logout icon — no st.button → no CSS override
+    # JS finds the hidden button by its unique wrapper id and clicks it (same-page rerun)
+    st.markdown(f"""<div style="display:flex;align-items:center;gap:8px;
+      justify-content:flex-end;height:64px;width:100%;padding-right:4px;">
       <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
         display:flex;align-items:center;justify-content:center;
         font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
       <span style="font-size:.82rem;font-weight:600;color:#374151;
-        white-space:nowrap;">{S(dname)}</span>
-      <a href="?logout=1" title="Sign out"
+        white-space:nowrap;flex-shrink:0;">{S(dname)}</span>
+      <div id="qg-logout-btn"
+        onclick="(function(){{
+          var w=window.parent.document.getElementById('qg-logout-trigger');
+          if(w){{var b=w.querySelector('button');if(b){{b.click();return;}}}}
+          var btns=window.parent.document.querySelectorAll('button');
+          for(var i=0;i<btns.length;i++){{
+            if(btns[i].innerText.trim()==='__LGT__'){{btns[i].click();return;}}
+          }}
+        }})()"
+        title="Sign out"
         style="width:34px;height:34px;border-radius:8px;border:1.5px solid #e5e7eb;
           background:#fff;display:flex;align-items:center;justify-content:center;
-          flex-shrink:0;text-decoration:none;color:#6b7280;transition:all .15s;"
+          flex-shrink:0;cursor:pointer;color:#6b7280;transition:background .15s,
+          border-color .15s,color .15s;"
         onmouseenter="this.style.background='#fff7ed';this.style.borderColor='#e84c1e';this.style.color='#e84c1e'"
         onmouseleave="this.style.background='#fff';this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -876,8 +909,15 @@ with nb6:
           <polyline points="16 17 21 12 16 7"/>
           <line x1="21" y1="12" x2="9" y2="12"/>
         </svg>
-      </a>
+      </div>
     </div>""", unsafe_allow_html=True)
+
+# Hidden logout trigger — unique id wrapper so JS finds it instantly
+st.markdown('<div id="qg-logout-trigger" class="hidden-logout">', unsafe_allow_html=True)
+if st.button("__LGT__", key="n_logout"):
+    st.session_state._do_logout = True
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
 # API key warning (Generate page only)
 if not get_key() and cp == "Generate":
