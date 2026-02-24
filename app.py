@@ -473,34 +473,47 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
   display:flex!important;align-items:center!important;
   padding-top:0!important;padding-bottom:0!important;flex-shrink:0!important;}
 /* Nav link buttons — transparent tab style */
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:not(:first-child):not(:last-child) button{
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
+  [data-testid="column"]:not(:first-child):not(:last-child) button{
   font-family:'Inter',sans-serif!important;font-size:.82rem!important;font-weight:500!important;
   background:transparent!important;color:var(--tx3)!important;border:none!important;
   border-radius:0!important;box-shadow:none!important;height:64px!important;
   padding:0 10px!important;white-space:nowrap!important;width:auto!important;
   border-bottom:2px solid transparent!important;transition:color .15s,border-color .15s!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:not(:first-child):not(:last-child) button:hover{
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
+  [data-testid="column"]:not(:first-child):not(:last-child) button:hover{
   color:var(--tx)!important;background:transparent!important;transform:none!important;
   box-shadow:none!important;border-bottom:2px solid var(--bd2)!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:not(:first-child):not(:last-child) button[kind="primary"]{
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
+  [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]{
   color:var(--or)!important;font-weight:700!important;
   border-bottom:2px solid var(--or)!important;background:transparent!important;box-shadow:none!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:not(:first-child):not(:last-child) button[kind="primary"]:hover{
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
+  [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* Exit icon button — last column, styled as small icon */
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:last-child{
-  justify-content:center!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:last-child button{
-  width:36px!important;height:36px!important;min-width:36px!important;
-  border-radius:8px!important;padding:0!important;
-  background:#fff!important;color:#374151!important;
-  border:1.5px solid var(--bd)!important;box-shadow:none!important;
-  font-size:1rem!important;line-height:1!important;
-  transition:all .18s!important;display:flex!important;
-  align-items:center!important;justify-content:center!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:last-child button:hover{
-  background:var(--ol)!important;border-color:var(--or)!important;
-  color:var(--or)!important;transform:none!important;box-shadow:none!important;}
+/* ── Sign-out door icon button (last column nb7) ── */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child{
+  justify-content:center!important;padding:0!important;
+  flex:0 0 44px!important;max-width:44px!important;min-width:44px!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child [data-testid="stButton"]{
+  display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button{
+  width:36px!important;height:36px!important;min-width:36px!important;max-width:36px!important;
+  border-radius:8px!important;padding:0!important;line-height:1!important;
+  border:1.5px solid #e5e7eb!important;box-shadow:none!important;
+  background-color:#ffffff!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpolyline points='16 17 21 12 16 7'/%3E%3Cline x1='21' y1='12' x2='9' y2='12'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important;background-position:center!important;background-size:16px 16px!important;
+  font-size:0!important;color:transparent!important;
+  transition:background-color .18s,border-color .18s!important;cursor:pointer!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:hover{
+  background-color:#fff7ed!important;border-color:#e84c1e!important;transform:none!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e84c1e' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpolyline points='16 17 21 12 16 7'/%3E%3Cline x1='21' y1='12' x2='9' y2='12'/%3E%3C/svg%3E")!important;
+  box-shadow:none!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
 /* PDF banner Change button — vertically centered */
@@ -740,14 +753,27 @@ if not st.session_state.logged_in:
     st.markdown("<div style='height:3.5rem'></div>", unsafe_allow_html=True)
     _, mc, _ = st.columns([1, 1.05, 1])
     with mc:
-        st.markdown("""
+        st.markdown(f"""
         <div style="text-align:center;margin-bottom:1.75rem;">
-          <div style="width:64px;height:64px;border-radius:16px;background:#e84c1e;
-            display:flex;align-items:center;justify-content:center;font-size:2rem;
-            margin:0 auto 1rem;box-shadow:0 8px 24px rgba(232,76,30,.35);">🧠</div>
-          <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.04em;margin-bottom:.25rem;">
-            QuizGenius AI</div>
-          <div style="font-size:.875rem;color:#6b7280;line-height:1.7;max-width:280px;margin:0 auto;">
+          <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:1rem;">
+            <div style="width:52px;height:52px;border-radius:14px;background:#e84c1e;
+              display:flex;align-items:center;justify-content:center;
+              box-shadow:0 8px 24px rgba(232,76,30,.35);">
+              <span style="font-size:1.6rem;font-weight:900;color:#fff;
+                letter-spacing:-.04em;font-family:'Inter',system-ui,sans-serif;
+                line-height:1;">Q</span>
+            </div>
+            <div style="text-align:left;">
+              <div style="font-size:1.35rem;font-weight:800;color:#111;
+                letter-spacing:-.04em;line-height:1.1;">
+                QuizGenius <span style="color:#e84c1e;">AI</span></div>
+              <div style="font-size:.6rem;font-weight:600;color:#9ca3af;
+                text-transform:uppercase;letter-spacing:.1em;margin-top:1px;">
+                AI Study Platform</div>
+            </div>
+          </div>
+          <div style="font-size:.875rem;color:#6b7280;line-height:1.7;
+            max-width:280px;margin:0 auto;">
             Transform any PDF into exam-ready quizzes instantly.</div>
         </div>""", unsafe_allow_html=True)
         t1, t2 = st.columns(2)
@@ -808,14 +834,29 @@ is_guest = uname == "__guest__"
 dname    = "Guest" if is_guest else uname.capitalize()
 init     = dname[0].upper()
 
-nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.2, .6, .78, .56, .9, .56, 2.0, 0.38])
+# ── shared logo HTML (reused in navbar + login) ──────────────────
+Q_LOGO = """<div style="width:{sz}px;height:{sz}px;border-radius:{r}px;background:#e84c1e;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 4px 14px rgba(232,76,30,.35);">
+  <span style="font-size:{fs};font-weight:900;color:#fff;letter-spacing:-.04em;
+    font-family:'Inter',system-ui,sans-serif;line-height:1;">{ltr}</span>
+</div>"""
+
+def q_logo(sz=32, r=9, fs="1rem", ltr="Q"):
+    return Q_LOGO.format(sz=sz, r=r, fs=fs, ltr=ltr)
+
+# ── door SVG removed — now handled via CSS background-image ──────
+
+nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.2, .60, .78, .56, .90, .56, 1.85, 0.42])
 with nb0:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;">
-      <div style="width:32px;height:32px;border-radius:8px;background:#e84c1e;
-        display:flex;align-items:center;justify-content:center;font-size:1rem;
-        box-shadow:0 4px 12px rgba(232,76,30,.3);">🧠</div>
-      <div style="font-size:.9rem;font-weight:800;color:#111;letter-spacing:-.02em;">
-        QuizGenius <span style="color:#e84c1e;">AI</span></div>
+      {q_logo(32, 9, "1rem", "Q")}
+      <div style="line-height:1.1;">
+        <div style="font-size:.88rem;font-weight:800;color:#111;letter-spacing:-.02em;">
+          QuizGenius <span style="color:#e84c1e;">AI</span></div>
+        <div style="font-size:.52rem;font-weight:600;color:#9ca3af;
+          text-transform:uppercase;letter-spacing:.1em;">AI Study Platform</div>
+      </div>
     </div>""", unsafe_allow_html=True)
 with nb1:
     if st.button("Home",      key="n_home",  type="primary" if cp=="Home"                        else "secondary"): go("Home")
@@ -828,17 +869,18 @@ with nb4:
 with nb5:
     if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary"): go("About")
 with nb6:
-    # Avatar + name only — no sign out text
+    # Avatar + display name — right-aligned
     st.markdown(f"""<div style="display:flex;align-items:center;gap:10px;
-      justify-content:flex-end;height:64px;width:100%;padding-right:6px;">
+      justify-content:flex-end;height:64px;width:100%;padding-right:4px;">
       <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
         display:flex;align-items:center;justify-content:center;
         font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
-      <span style="font-size:.82rem;font-weight:600;color:#374151;white-space:nowrap;">{S(dname)}</span>
+      <span style="font-size:.82rem;font-weight:600;color:#374151;
+        white-space:nowrap;">{S(dname)}</span>
     </div>""", unsafe_allow_html=True)
 with nb7:
-    # Clean exit icon button — styled via CSS nth-child(:last-child)
-    if st.button("⎋", key="n_logout", help="Sign out"):
+    # Real st.button styled as door-icon via CSS background-image (no text visible)
+    if st.button("signout", key="n_logout", help="Sign out", type="secondary"):
         for k in list(st.session_state.keys()): del st.session_state[k]
         st.rerun()
 
@@ -989,7 +1031,7 @@ if cp == "Home":
       <div class="ft-top">
         <div>
           <div class="ft-brand">
-            <div class="ft-logo">🧠</div><span class="ft-name">QuizGenius AI</span></div>
+            <div class="ft-logo" style="display:flex;align-items:center;justify-content:center;"><span style="font-size:.85rem;font-weight:900;color:#fff;font-family:'Inter',system-ui,sans-serif;line-height:1;">Q</span></div><span class="ft-name">QuizGenius AI</span></div>
           <p class="ft-desc">Transform any PDF into an adaptive learning experience.
             Powered by Groq + Llama 3.1.</p></div>
         <div><div class="ft-hd">Product</div>
@@ -1543,9 +1585,11 @@ elif cp in ("Study","Flashcard","Test"):
             else:
                 st.markdown(f"""<div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;
                   padding:2.5rem;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);">
-                  <div style="width:56px;height:56px;border-radius:50%;background:#fff7ed;
-                    border:1.5px solid #fed7aa;display:flex;align-items:center;justify-content:center;
-                    font-size:1.5rem;margin:0 auto 1rem;">🧠</div>
+                  <div style="width:56px;height:56px;border-radius:14px;background:#e84c1e;
+                    display:flex;align-items:center;justify-content:center;
+                    box-shadow:0 6px 20px rgba(232,76,30,.3);margin:0 auto 1rem;">
+                    <span style="font-size:1.5rem;font-weight:900;color:#fff;
+                      font-family:'Inter',system-ui,sans-serif;line-height:1;">Q</span></div>
                   <div style="font-size:1.125rem;font-weight:800;color:#111;margin-bottom:.375rem;">
                     Generating {diff} Test</div>
                   <div style="font-size:.875rem;color:#6b7280;">Creating {n} fresh questions via Groq Llama 3.1…</div>
