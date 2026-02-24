@@ -38,8 +38,6 @@ def go(p): st.session_state.current_page=p; st.rerun()
 def hash_pw(pw): return hashlib.sha256(pw.encode()).hexdigest()
 def get_key(): return GROQ_API_KEY or st.session_state.get("groq_key_input","")
 
-# (logout handled inline by checkbox after navbar — no top-level handler needed)
-
 def do_login(u,pw):
     users=st.session_state.users
     if u not in users: return False,"User not found."
@@ -385,70 +383,18 @@ div[data-testid="stRadio"]>div{gap:.375rem!important;flex-direction:column!impor
 div[data-testid="stRadio"]>div>label{background:#fff!important;padding:.8rem 1.125rem!important;
   border-radius:var(--r2)!important;border:1.5px solid var(--bd)!important;
   font-size:.875rem!important;font-weight:500!important;width:100%!important;
-  margin:0!important;transition:all .15s!important;cursor:pointer!important;
-  color:#374151!important;}
-div[data-testid="stRadio"]>div>label p,
-div[data-testid="stRadio"]>div>label div,
-div[data-testid="stRadio"]>div>label span{color:#374151!important;}
+  margin:0!important;transition:all .15s!important;cursor:pointer!important;}
 div[data-testid="stRadio"]>div>label:hover{border-color:var(--or)!important;
   background:var(--ol)!important;color:var(--or)!important;}
-div[data-testid="stRadio"]>div>label:hover p,
-div[data-testid="stRadio"]>div>label:hover span{color:var(--or)!important;}
 div[data-testid="stRadio"]>div>label:has(input:checked){border-color:var(--or)!important;
   background:var(--ol)!important;color:var(--or)!important;font-weight:700!important;
   box-shadow:0 0 0 3px rgba(232,76,30,.08)!important;}
-div[data-testid="stRadio"]>div>label:has(input:checked) p,
-div[data-testid="stRadio"]>div>label:has(input:checked) span{color:var(--or)!important;}
 div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
-/* SMOOTH PAGE FADE TRANSITION — 0.1s barely noticeable */
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-[data-testid="stMainBlockContainer"]>div>div{animation:fadeIn .1s ease both;}
-
-/* GLOBAL TEXT VISIBILITY — fix any invisible text across the app */
-.stApp *{color:inherit;}
-p,span,div,label,li,td,th,h1,h2,h3,h4,h5,h6{color:var(--tx2);}
-.stMarkdown p,.stMarkdown span{color:var(--tx2)!important;}
-/* Slider */
-[data-testid="stSlider"] label{color:var(--tx2)!important;font-weight:600!important;}
-[data-testid="stSlider"] [data-testid="stTickBarMin"],
-[data-testid="stSlider"] [data-testid="stTickBarMax"]{color:var(--tx4)!important;}
-/* Caption / small text */
-.stCaption,.stCaption p{color:var(--tx3)!important;font-size:.75rem!important;}
-/* Expander */
-[data-testid="stExpander"] summary span{color:var(--tx)!important;font-weight:600!important;}
-[data-testid="stExpander"] summary:hover span{color:var(--or)!important;}
-[data-testid="stExpander"] [data-testid="stMarkdownContainer"] p{color:var(--tx2)!important;}
-/* Multiselect */
-[data-testid="stMultiSelect"] label{color:var(--tx2)!important;font-weight:600!important;}
-[data-testid="stMultiSelect"] [data-baseweb="tag"]{background:var(--ol)!important;
-  border:1px solid var(--om)!important;}
-[data-testid="stMultiSelect"] [data-baseweb="tag"] span{color:var(--or)!important;}
-/* Checkbox */
-[data-testid="stCheckbox"] label p{color:var(--tx2)!important;}
-/* Progress bar text */
-[data-testid="stProgress"] p{color:var(--tx3)!important;}
-/* Spinner text */
-[data-testid="stSpinner"] p{color:var(--tx2)!important;}
-/* Code blocks */
-.stCodeBlock code{color:#d63031!important;}
-
 /* MISC */
 .stSelectbox>div>div{background:#fff!important;border:1.5px solid var(--bd)!important;
-  border-radius:var(--r2)!important;color:var(--tx)!important;}
-.stSelectbox label{color:var(--tx2)!important;font-size:.8rem!important;font-weight:600!important;}
-/* FILE UPLOADER — fix dark bg, ensure text visibility */
-[data-testid="stFileUploader"]{background:#fff!important;border:2px dashed var(--bd2)!important;
-  border-radius:var(--r)!important;padding:.5rem!important;}
-[data-testid="stFileUploader"]:hover{border-color:var(--or)!important;}
-[data-testid="stFileUploaderDropzone"]{background:#fff!important;}
-[data-testid="stFileUploaderDropzone"] *{color:var(--tx2)!important;}
-[data-testid="stFileUploaderDropzone"] small{color:var(--tx3)!important;}
-[data-testid="stFileUploader"] button{background:var(--or)!important;color:#fff!important;
-  border:none!important;border-radius:var(--r2)!important;font-weight:600!important;}
-section[data-testid="stFileUploadDropzone"]{background:#fff!important;}
-section[data-testid="stFileUploadDropzone"] div,
-section[data-testid="stFileUploadDropzone"] span,
-section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
+  border-radius:var(--r2)!important;}
+[data-testid="stFileUploader"]{background:#fff;border:2px dashed var(--bd2);border-radius:var(--r);}
+[data-testid="stFileUploader"]:hover{border-color:var(--or);}
 [data-testid="stForm"]{background:#fff!important;border:1.5px solid var(--bd)!important;
   border-radius:var(--r)!important;box-shadow:var(--sh)!important;padding:1.5rem!important;}
 .stSuccess>div{background:#f0fdf4!important;border:1px solid #bbf7d0!important;
@@ -463,87 +409,374 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 .stProgress>div{background:#f3f4f6!important;border-radius:999px!important;}
 [data-testid="stExpander"]{background:#fff!important;border:1.5px solid var(--bd)!important;
   border-radius:var(--r)!important;}
-/* ── NAVBAR ── */
+/* NAVBAR STICKY */
 [data-testid="stAppViewBlockContainer"]>div:first-child{
   position:sticky!important;top:0!important;z-index:9999!important;
   background:#fff!important;border-bottom:1px solid var(--bd)!important;
-  box-shadow:0 1px 8px rgba(0,0,0,.06)!important;
-  height:64px!important;overflow:visible!important;}
-/* Force EVERY intermediate Streamlit wrapper inside navbar to be a flex row centered at 64px */
-[data-testid="stAppViewBlockContainer"]>div:first-child>div,
-[data-testid="stAppViewBlockContainer"]>div:first-child>div>div,
-[data-testid="stAppViewBlockContainer"]>div:first-child>div>div>div{
-  height:64px!important;padding:0!important;margin:0!important;}
+  box-shadow:0 1px 8px rgba(0,0,0,.06)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]{
-  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
-  align-items:center!important;justify-content:flex-start!important;
-  padding:0 1.5rem!important;height:64px!important;min-height:64px!important;
-  gap:0!important;margin:0 auto!important;max-width:1400px!important;
-  overflow:visible!important;}
-/* Each column: full height flex, vertically centred */
+  align-items:center!important;padding:0 2rem!important;min-height:64px!important;
+  gap:0!important;max-width:1400px!important;margin:0 auto!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]{
-  display:flex!important;flex-direction:row!important;align-items:center!important;
-  height:64px!important;min-height:64px!important;
-  padding:0!important;margin:0!important;flex-shrink:0!important;overflow:visible!important;}
-/* Every Streamlit wrapper INSIDE columns: propagate height + centre */
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]>div,
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]>div>div,
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stElementContainer"],
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stMarkdownContainer"],
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stButton"]{
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  height:64px!important;width:100%!important;padding:0!important;margin:0!important;}
-/* Nav link buttons — transparent tab underline style */
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
-  [data-testid="column"]:not(:first-child):not(:last-child) button{
+  display:flex!important;align-items:center!important;
+  padding-top:0!important;padding-bottom:0!important;flex-shrink:0!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child button{
   font-family:'Inter',sans-serif!important;font-size:.82rem!important;font-weight:500!important;
   background:transparent!important;color:var(--tx3)!important;border:none!important;
   border-radius:0!important;box-shadow:none!important;height:64px!important;
-  padding:0 10px!important;white-space:nowrap!important;width:auto!important;
+  padding:0 14px!important;white-space:nowrap!important;width:auto!important;
   border-bottom:2px solid transparent!important;transition:color .15s,border-color .15s!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
-  [data-testid="column"]:not(:first-child):not(:last-child) button:hover{
+[data-testid="stAppViewBlockContainer"]>div:first-child button:hover{
   color:var(--tx)!important;background:transparent!important;transform:none!important;
   box-shadow:none!important;border-bottom:2px solid var(--bd2)!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
-  [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]{
+[data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]{
   color:var(--or)!important;font-weight:700!important;
   border-bottom:2px solid var(--or)!important;background:transparent!important;box-shadow:none!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
-  [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
+[data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* Hide logout block — display:none kills layout space; JS .click() still works on hidden elements */
-/* ── Logout button in nb7 — white icon button, no background-image tricks ── */
+/* hide real logout */
 [data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child{
-  flex:0 0 42px!important;max-width:42px!important;min-width:42px!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button,
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:focus,
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:active{
-  width:34px!important;height:34px!important;min-width:34px!important;max-width:34px!important;
-  border-radius:8px!important;border:1.5px solid #e5e7eb!important;
-  background-color:#ffffff!important;background:#ffffff!important;
-  color:#6b7280!important;font-size:.85rem!important;line-height:34px!important;
-  padding:0!important;box-shadow:none!important;transform:none!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:hover{
-  background-color:#fff7ed!important;background:#fff7ed!important;
-  border-color:#e84c1e!important;color:#e84c1e!important;
-  transform:none!important;box-shadow:none!important;}
-/* ── Kill gap between header band and content (gap is on the FLEX PARENT) ── */
-section[data-testid="stMain"] [data-testid="stVerticalBlock"]{gap:0!important;}
-/* Generate page columns — align tops */
-.gl>[data-testid="column"]{align-self:start!important;}
-/* Kill ALL Streamlit block gaps */
-[data-testid="stAppViewBlockContainer"]>div:not(:first-child){
-  margin-top:0!important;padding-top:0!important;}
-[data-testid="stMainBlockContainer"]{padding-top:0!important;margin-top:0!important;}
-section[data-testid="stMain"]>div{padding-top:0!important;}
+  [data-testid="column"]:last-child [data-testid="stButton"]{
+  position:absolute!important;width:1px!important;height:1px!important;
+  overflow:hidden!important;opacity:0!important;pointer-events:none!important;clip:rect(0,0,0,0)!important;}
 /* LAYOUTS */
-.pw{max-width:900px;margin:0 auto;padding:.5rem 1.5rem 5rem;}
+.pw{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+.fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
+.badge{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.07em;padding:2px 9px;border-radius:999px;}
+.b-or{background:var(--ol);color:var(--or);border:1px solid var(--om);}
+.b-gr{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;}
+.b-re{background:#fef2f2;color:var(--re);border:1px solid #fecaca;}
+.b-ye{background:#fffbeb;color:#d97706;border:1px solid #fde68a;}
+.b-gy{background:#f9fafb;color:var(--tx3);border:1px solid var(--bd);}
+/* STUDY CARDS */
+.qc{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+  overflow:hidden;margin-bottom:.875rem;transition:box-shadow .18s;}
+.qc:hover{box-shadow:var(--sh2);}
+.qc-head{padding:1rem 1.25rem .625rem;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid #f9fafb;}
+.qc-num{font-size:.6rem;font-weight:700;text-transform:uppercase;color:var(--tx4);
+  background:#f9fafb;border:1px solid var(--bd);border-radius:5px;padding:2px 8px;}
+.qc-q{padding:.75rem 1.25rem .875rem;font-size:.925rem;font-weight:600;line-height:1.65;}
+.oc{display:flex;align-items:center;gap:.75rem;padding:.625rem 1rem;margin:.2rem 1.25rem;border-radius:var(--r2);}
+.oc-ok{border:1.5px solid #bbf7d0;background:#f0fdf4;}
+.oc-no{border:1.5px solid var(--bd);background:transparent;}
+.ol-ok{width:24px;height:24px;border-radius:50%;background:var(--gr);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;flex-shrink:0;}
+.ol-no{width:24px;height:24px;border-radius:50%;background:#f3f4f6;color:var(--tx3);
+  display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:600;
+  flex-shrink:0;border:1px solid var(--bd);}
+.ot-ok{font-size:.875rem;font-weight:600;color:#16a34a;flex:1;}
+.ot-no{font-size:.875rem;color:var(--tx3);flex:1;}
+.qc-foot{border-top:1px solid #f3f4f6;padding:.75rem 1.25rem;
+  display:flex;align-items:center;gap:.75rem;background:#fafafa;}
+/* PROGRESS BAR */
+.pb-wrap{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+  padding:1.25rem 1.375rem;margin-top:1rem;}
+.pb-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.625rem;}
+.pb-lbl{font-size:.78rem;font-weight:700;color:var(--or);}
+.pb-pct{font-size:.78rem;font-weight:700;color:var(--tx3);}
+.pb-bar{width:100%;height:6px;background:#f3f4f6;border-radius:999px;overflow:hidden;}
+.pb-fill{height:100%;background:#e84c1e;border-radius:999px;transition:width .4s;}
+.pb-note{text-align:center;font-size:.68rem;color:var(--tx4);margin-top:.75rem;font-style:italic;}
+/* PDF BANNER */
+.pdf-bn{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+  padding:1rem 1.25rem;display:flex;align-items:center;gap:.875rem;
+  margin-bottom:1.25rem;box-shadow:var(--sh);}
+.pdf-ic{width:44px;height:44px;border-radius:10px;background:var(--ol);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.25rem;flex-shrink:0;border:1px solid var(--om);}
+/* TEST CARDS */
+.tc{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+  padding:1.375rem;margin-bottom:.75rem;}
+.tc-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap;}
+.tc-num{background:var(--or);color:#fff;padding:2px 10px;border-radius:6px;font-size:.65rem;font-weight:800;}
+.tc-q{font-size:.925rem;font-weight:700;line-height:1.6;}
+.tpb{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+  padding:.875rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem;}
+.tpb-bar{flex:1;height:5px;background:#f3f4f6;border-radius:999px;overflow:hidden;}
+.tpb-fill{height:100%;background:#e84c1e;border-radius:999px;transition:width .4s;}
+.tpb-timer{color:var(--or);font-size:.85rem;font-weight:700;white-space:nowrap;}
+/* REVIEW */
+.rv{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 1rem;
+  border-radius:var(--r2);background:#fff;margin-bottom:.375rem;border:1.5px solid var(--bd);}
+.rv-c{border-left:3px solid var(--gr);background:#f0fdf4;}
+.rv-w{border-left:3px solid var(--re);background:#fef2f2;}
+.rv-q{font-size:.85rem;font-weight:700;margin-bottom:.2rem;}
+.rv-a{font-size:.78rem;color:var(--tx3);}
+/* DASHBOARD */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:.875rem;margin-bottom:1.25rem;}
+.sc{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+  padding:1.375rem;text-align:center;box-shadow:var(--sh);transition:all .18s;}
+.sc:hover{box-shadow:var(--sh2);transform:translateY(-2px);}
+.sc-ico{font-size:1.5rem;display:block;margin-bottom:.375rem;}
+.sc-val{font-size:1.75rem;font-weight:800;color:var(--or);letter-spacing:-.03em;line-height:1;}
+.sc-lbl{font-size:.6rem;font-weight:600;color:var(--tx4);text-transform:uppercase;
+  letter-spacing:.1em;margin-top:.3rem;}
+.shr{display:flex;align-items:center;gap:.75rem;background:#fff;border:1.5px solid var(--bd);
+  border-radius:var(--r2);padding:.75rem 1.125rem;margin-bottom:.375rem;
+  transition:box-shadow .15s;box-shadow:var(--sh);}
+.shr:hover{box-shadow:var(--sh2);}
+.shr-d{font-size:.58rem;font-weight:700;text-transform:uppercase;
+  padding:2px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0;}
+.shr-s{font-size:1rem;font-weight:800;min-width:48px;text-align:center;}
+.shr-m{flex:1;min-width:0;}
+.shr-pdf{font-weight:600;font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.shr-dt{color:var(--tx4);font-size:.68rem;margin-top:.1rem;}
+.shr-pb{width:72px;height:4px;background:#f3f4f6;border-radius:999px;overflow:hidden;flex-shrink:0;}
+.shr-pf{height:100%;border-radius:999px;}
+.shr-pct{font-size:.875rem;font-weight:700;min-width:40px;text-align:right;}
+.ds-t{font-size:.95rem;font-weight:700;margin:1.75rem 0 .875rem;
+  display:flex;align-items:center;gap:.5rem;}
+.ds-t::after{content:'';flex:1;height:1px;background:var(--bd);}
+.ch-w{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+  padding:1.25rem;margin-bottom:1rem;box-shadow:var(--sh);}
+/* HOME */
+.hs{background:var(--wh);border-bottom:1px solid var(--bd);padding:5rem 2rem 4rem;}
+.hi{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.htag{display:inline-flex;align-items:center;gap:.375rem;background:var(--ol);
+  border:1px solid var(--om);color:var(--or);font-size:.62rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;padding:.3rem .875rem;
+  border-radius:999px;margin-bottom:1.25rem;}
+.hh1{font-size:3.25rem;font-weight:800;letter-spacing:-.04em;line-height:1.05;margin-bottom:1rem;}
+.hh1 .ac{color:var(--or);}
+.hp{font-size:.9rem;color:var(--tx3);line-height:1.85;margin-bottom:1.75rem;}
+.pr{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;}
+.pi{background:#f9fafb;border:1.5px solid var(--bd);border-radius:var(--r2);
+  padding:.4rem .875rem;font-size:.72rem;font-weight:600;color:var(--tx3);
+  display:flex;align-items:center;gap:.35rem;transition:all .15s;}
+.pi:hover{border-color:var(--or);color:var(--or);background:var(--ol);}
+.sb{background:var(--tx);padding:2.25rem 0;}
+.si{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);}
+.si-c{text-align:center;padding:1rem;border-right:1px solid #333;}
+.si-c:last-child{border-right:none;}
+.si-n{font-size:2rem;font-weight:800;color:var(--or);display:block;letter-spacing:-.04em;}
+.si-l{font-size:.6rem;color:#9ca3af;font-weight:600;text-transform:uppercase;
+  letter-spacing:.12em;margin-top:.25rem;display:block;}
+.sec{padding:5rem 2rem;}
+.sec-alt{padding:5rem 2rem;background:#fff;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
+.sec-in{max-width:1280px;margin:0 auto;}
+.sec-ey{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--or);margin-bottom:.25rem;}
+.sec-ti{font-size:1.875rem;font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:.5rem;}
+.sec-su{font-size:.9rem;color:var(--tx3);line-height:1.75;max-width:460px;}
+.hwg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem;}
+.hwc{background:#fff;border:1.5px solid var(--bd);border-radius:16px;padding:1.875rem;
+  transition:all .25s;position:relative;overflow:hidden;box-shadow:var(--sh);}
+.hwc:hover{transform:translateY(-4px);box-shadow:var(--sh3);border-color:var(--or);}
+.hwc::before{content:attr(data-n);position:absolute;top:-8px;right:1rem;
+  font-size:5rem;font-weight:800;color:rgba(232,76,30,.06);line-height:1;pointer-events:none;}
+.hwi{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:1.375rem;margin-bottom:1rem;background:var(--ol);border:1px solid var(--om);}
+.hwt{font-size:.925rem;font-weight:700;margin-bottom:.375rem;}
+.hwp{font-size:.825rem;color:var(--tx3);line-height:1.75;margin:0;}
+.fg{display:grid;grid-template-columns:repeat(2,1fr);gap:.875rem;}
+.fcc{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);padding:1.125rem;
+  display:flex;align-items:flex-start;gap:.75rem;transition:all .18s;box-shadow:var(--sh);}
+.fcc:hover{box-shadow:var(--sh2);border-color:var(--or);transform:translateY(-2px);}
+.fci{width:36px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;font-size:.95rem;background:var(--ol);border:1px solid var(--om);}
+.fct{font-size:.8rem;font-weight:700;margin-bottom:.1rem;}
+.fcs{font-size:.7rem;color:var(--tx4);line-height:1.6;}
+.dfg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem;}
+.dfc{background:#fff;border:1.5px solid var(--bd);border-radius:16px;padding:1.875rem;
+  transition:all .25s;box-shadow:var(--sh);}
+.dfc:hover{transform:translateY(-4px);box-shadow:var(--sh3);}
+.dfc.e{border-top:3px solid var(--gr);}
+.dfc.m{border-top:3px solid var(--or);}
+.dfc.h{border-top:3px solid var(--re);}
+.dfn{font-size:1.25rem;font-weight:800;margin:.5rem 0 .375rem;}
+.dfd{font-size:.825rem;color:var(--tx3);line-height:1.75;}
+.ft{background:var(--tx);padding:3.5rem 2rem 1.5rem;}
+.fti{max-width:1280px;margin:0 auto;}
+.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:3rem;margin-bottom:2.5rem;}
+.ft-brand{display:flex;align-items:center;gap:.625rem;margin-bottom:.875rem;}
+.ft-logo{width:30px;height:30px;border-radius:7px;background:var(--or);
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+.ft-name{font-size:.875rem;font-weight:700;color:#fff;}
+.ft-desc{font-size:.8rem;color:#6b7280;line-height:1.8;}
+.ft-hd{font-size:.6rem;font-weight:700;color:#9ca3af;text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:.75rem;}
+.ft-lk{display:block;font-size:.8rem;color:#6b7280;margin-bottom:.4rem;cursor:pointer;transition:color .15s;}
+.ft-lk:hover{color:var(--or);}
+.ft-bot{border-top:1px solid #1f2937;padding-top:1.25rem;display:flex;
+  justify-content:space-between;align-items:center;flex-wrap:wrap;
+  gap:.875rem;font-size:.65rem;color:#6b7280;text-transform:uppercase;letter-spacing:.07em;}
+/* GENERATE */
+.gl{display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start;}
+.gp{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;}
+.gp-hd{padding:.875rem 1.25rem;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;}
+.gp-ti{font-size:.8rem;font-weight:700;}
+.gp-em{display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:3rem 1.5rem;text-align:center;}
+.gp-em-ic{width:56px;height:56px;border-radius:50%;background:#f3f4f6;
+  display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1rem;}
+.gp-em-t{font-size:.85rem;font-weight:600;}
+.gp-em-s{font-size:.75rem;color:var(--tx4);margin-top:.25rem;line-height:1.6;}
+.cfg{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+  padding:1.25rem 1.375rem;margin-bottom:.875rem;box-shadow:var(--sh);}
+.cfg-lbl{font-size:.78rem;font-weight:700;margin-bottom:.125rem;}
+.cfg-hint{font-size:.7rem;color:var(--tx4);margin-bottom:.75rem;}
+.qtg{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;}
+.qtc{border:1.5px solid var(--bd);border-radius:var(--r2);padding:.875rem;
+  text-align:center;background:#fff;cursor:pointer;transition:all .18s;}
+.qtc:hover{border-color:var(--or);background:var(--ol);}
+.qtc.sel{border-color:var(--or);background:var(--ol);box-shadow:0 0 0 3px rgba(232,76,30,.1);}
+.qtc-ico{font-size:1.375rem;margin-bottom:.375rem;}
+.qtc-n{font-size:.75rem;font-weight:700;}
+.qtc-d{font-size:.62rem;color:var(--tx4);margin-top:.125rem;}
+.po-ok{display:flex;align-items:center;gap:.625rem;padding:.5rem .875rem;
+  margin:.25rem 0;border-radius:var(--r2);border:1.5px solid #bbf7d0;background:#f0fdf4;}
+.po{display:flex;align-items:center;gap:.625rem;padding:.5rem .875rem;
+  margin:.25rem 0;border-radius:var(--r2);border:1.5px solid var(--bd);background:transparent;}
+.pl-ok{width:22px;height:22px;border-radius:50%;background:var(--gr);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;font-weight:800;flex-shrink:0;}
+.pl{width:22px;height:22px;border-radius:50%;background:#f3f4f6;color:var(--tx3);
+  display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:600;
+  flex-shrink:0;border:1px solid var(--bd);}
+.pt-ok{font-size:.82rem;font-weight:600;color:#16a34a;flex:1;}
+.pt{font-size:.82rem;color:var(--tx3);flex:1;}
+/* TEST DIFFICULTY */
+.tdg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.125rem;margin-bottom:1.25rem;}
+.tdc{background:#fff;border:1.5px solid var(--bd);border-radius:16px;padding:1.75rem;
+  text-align:center;box-shadow:var(--sh);transition:all .22s;position:relative;}
+.tdc:hover{transform:translateY(-4px);box-shadow:var(--sh3);border-color:var(--or);}
+.tdc.feat{border-color:var(--or);box-shadow:0 0 0 3px rgba(232,76,30,.08);}
+.tdc-pop{position:absolute;top:.75rem;right:.75rem;background:var(--or);
+  color:#fff;font-size:.52rem;font-weight:800;padding:2px 8px;border-radius:999px;}
+.tdc-ico{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:1.5rem;margin:0 auto .75rem;}
+.tdc-ico.e{background:#f0fdf4;border:1px solid #bbf7d0;}
+.tdc-ico.m{background:var(--ol);border:1px solid var(--om);}
+.tdc-ico.h{background:#fef2f2;border:1px solid #fecaca;}
+.tdc-n{font-size:1rem;font-weight:700;margin-bottom:.25rem;}
+.tdc-h{font-size:.75rem;color:var(--tx3);line-height:1.65;}
+.aw{max-width:960px;margin:0 auto;padding:3rem 1.5rem 5rem;}
+@media(max-width:900px){
+  .gl{grid-template-columns:1fr;}.hi{grid-template-columns:1fr;}
+  .hh1{font-size:2.25rem;}.hwg,.dfg,.ft-top,.tdg,.fg,.sg{grid-template-columns:1fr;}
+  .si{grid-template-columns:repeat(2,1fr);}.hs{padding:3rem 1.5rem;}}
+</style>
+"""
+st.markdown(CSS, unsafe_allow_html=True)
+
+# ════════════════════════════════════════════════════════════════
+# GLOBAL CSS
+# ════════════════════════════════════════════════════════════════
+CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+#MainMenu,footer,header,.stDeployButton{visibility:hidden!important;display:none!important;}
+[data-testid="collapsedControl"],section[data-testid="stSidebar"]{display:none!important;}
+.stApp>header{display:none!important;height:0!important;}
+html,body,.stApp,.main,.block-container,
+[data-testid="stAppViewBlockContainer"],[data-testid="stAppViewContainer"],
+[data-testid="stMainBlockContainer"],section.main>div:first-child,
+div[class*="block-container"]{padding-top:0!important;margin-top:0!important;}
+.block-container{max-width:100%!important;padding-bottom:0!important;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:#f3f4f6;}
+::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:999px;}
+:root{
+  --bg:#f8f5f0;--wh:#fff;--bd:#e5e7eb;--bd2:#d1d5db;
+  --tx:#111;--tx2:#374151;--tx3:#6b7280;--tx4:#9ca3af;
+  --or:#e84c1e;--ol:#fff7ed;--om:#fed7aa;--od:#c2410c;
+  --gr:#22c55e;--re:#ef4444;--ye:#f59e0b;
+  --sh:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+  --sh2:0 4px 24px rgba(0,0,0,.1);--sh3:0 8px 40px rgba(0,0,0,.12);
+  --r:12px;--r2:8px;}
+body,.stApp{font-family:'Inter',system-ui,sans-serif!important;
+  background:var(--bg)!important;color:var(--tx)!important;}
+/* BUTTONS */
+.stButton>button{font-family:'Inter',sans-serif!important;font-weight:600!important;
+  border-radius:var(--r2)!important;transition:all .18s!important;border:none!important;}
+.stButton>button[kind="primary"]{background:#e84c1e!important;color:#fff!important;
+  box-shadow:0 2px 8px rgba(232,76,30,.3)!important;}
+.stButton>button[kind="primary"]:hover{background:#c2410c!important;
+  transform:translateY(-1px)!important;box-shadow:0 4px 16px rgba(232,76,30,.4)!important;}
+.stButton>button[kind="secondary"]{background:#fff!important;color:var(--tx2)!important;
+  border:1.5px solid var(--bd)!important;}
+.stButton>button[kind="secondary"]:hover{border-color:var(--or)!important;
+  color:var(--or)!important;transform:translateY(-1px)!important;}
+.stButton>button:disabled{opacity:.4!important;transform:none!important;}
+.stDownloadButton>button{font-family:'Inter',sans-serif!important;font-weight:600!important;
+  background:#e84c1e!important;color:#fff!important;border:none!important;
+  border-radius:var(--r2)!important;}
+.stDownloadButton>button:hover{background:#c2410c!important;transform:translateY(-1px)!important;}
+/* INPUTS */
+.stTextInput input{font-family:'Inter',sans-serif!important;border-radius:var(--r2)!important;
+  border:1.5px solid var(--bd)!important;background:#fff!important;
+  padding:.625rem .875rem!important;font-size:.9rem!important;
+  transition:border-color .18s,box-shadow .18s!important;}
+.stTextInput input:focus{border-color:var(--or)!important;
+  box-shadow:0 0 0 3px rgba(232,76,30,.1)!important;outline:none!important;}
+.stTextInput input::placeholder{color:var(--tx4)!important;}
+.stTextInput>label{font-weight:600!important;font-size:.8rem!important;color:var(--tx3)!important;}
+/* RADIO */
+div[data-testid="stRadio"]>div{gap:.375rem!important;flex-direction:column!important;display:flex!important;}
+div[data-testid="stRadio"]>div>label{background:#fff!important;padding:.8rem 1.125rem!important;
+  border-radius:var(--r2)!important;border:1.5px solid var(--bd)!important;
+  font-size:.875rem!important;font-weight:500!important;width:100%!important;
+  margin:0!important;transition:all .15s!important;cursor:pointer!important;}
+div[data-testid="stRadio"]>div>label:hover{border-color:var(--or)!important;
+  background:var(--ol)!important;color:var(--or)!important;}
+div[data-testid="stRadio"]>div>label:has(input:checked){border-color:var(--or)!important;
+  background:var(--ol)!important;color:var(--or)!important;font-weight:700!important;
+  box-shadow:0 0 0 3px rgba(232,76,30,.08)!important;}
+div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
+/* MISC */
+.stSelectbox>div>div{background:#fff!important;border:1.5px solid var(--bd)!important;
+  border-radius:var(--r2)!important;}
+[data-testid="stFileUploader"]{background:#fff;border:2px dashed var(--bd2);border-radius:var(--r);}
+[data-testid="stFileUploader"]:hover{border-color:var(--or);}
+[data-testid="stForm"]{background:#fff!important;border:1.5px solid var(--bd)!important;
+  border-radius:var(--r)!important;box-shadow:var(--sh)!important;padding:1.5rem!important;}
+.stSuccess>div{background:#f0fdf4!important;border:1px solid #bbf7d0!important;
+  border-radius:var(--r2)!important;color:#166534!important;}
+.stError>div{background:#fef2f2!important;border:1px solid #fecaca!important;
+  border-radius:var(--r2)!important;color:#991b1b!important;}
+.stWarning>div{background:#fffbeb!important;border:1px solid #fde68a!important;
+  border-radius:var(--r2)!important;color:#92400e!important;}
+.stInfo>div{background:#eff6ff!important;border:1px solid #bfdbfe!important;
+  border-radius:var(--r2)!important;color:#1e40af!important;}
+.stProgress>div>div{background:#e84c1e!important;border-radius:999px!important;}
+.stProgress>div{background:#f3f4f6!important;border-radius:999px!important;}
+[data-testid="stExpander"]{background:#fff!important;border:1.5px solid var(--bd)!important;
+  border-radius:var(--r)!important;}
+/* NAVBAR STICKY */
+[data-testid="stAppViewBlockContainer"]>div:first-child{
+  position:sticky!important;top:0!important;z-index:9999!important;
+  background:#fff!important;border-bottom:1px solid var(--bd)!important;
+  box-shadow:0 1px 8px rgba(0,0,0,.06)!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]{
+  align-items:center!important;padding:0 2rem!important;min-height:64px!important;
+  gap:0!important;max-width:1400px!important;margin:0 auto!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]{
+  display:flex!important;align-items:center!important;
+  padding-top:0!important;padding-bottom:0!important;flex-shrink:0!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child button{
+  font-family:'Inter',sans-serif!important;font-size:.82rem!important;font-weight:500!important;
+  background:transparent!important;color:var(--tx3)!important;border:none!important;
+  border-radius:0!important;box-shadow:none!important;height:64px!important;
+  padding:0 14px!important;white-space:nowrap!important;width:auto!important;
+  border-bottom:2px solid transparent!important;transition:color .15s,border-color .15s!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child button:hover{
+  color:var(--tx)!important;background:transparent!important;transform:none!important;
+  box-shadow:none!important;border-bottom:2px solid var(--bd2)!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]{
+  color:var(--or)!important;font-weight:700!important;
+  border-bottom:2px solid var(--or)!important;background:transparent!important;box-shadow:none!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]:hover{
+  transform:none!important;background:transparent!important;box-shadow:none!important;}
+/* hide real logout */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="column"]:last-child [data-testid="stButton"]{
+  position:absolute!important;width:1px!important;height:1px!important;
+  overflow:hidden!important;opacity:0!important;pointer-events:none!important;clip:rect(0,0,0,0)!important;}
+/* LAYOUTS */
+.pw{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
 .badge{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.07em;padding:2px 9px;border-radius:999px;}
@@ -777,27 +1010,14 @@ if not st.session_state.logged_in:
     st.markdown("<div style='height:3.5rem'></div>", unsafe_allow_html=True)
     _, mc, _ = st.columns([1, 1.05, 1])
     with mc:
-        st.markdown(f"""
+        st.markdown("""
         <div style="text-align:center;margin-bottom:1.75rem;">
-          <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:1rem;">
-            <div style="width:52px;height:52px;border-radius:14px;background:#e84c1e;
-              display:flex;align-items:center;justify-content:center;
-              box-shadow:0 8px 24px rgba(232,76,30,.35);">
-              <span style="font-size:1.6rem;font-weight:900;color:#fff;
-                letter-spacing:-.04em;font-family:'Inter',system-ui,sans-serif;
-                line-height:1;">Q</span>
-            </div>
-            <div style="text-align:left;">
-              <div style="font-size:1.35rem;font-weight:800;color:#111;
-                letter-spacing:-.04em;line-height:1.1;">
-                QuizGenius <span style="color:#e84c1e;">AI</span></div>
-              <div style="font-size:.6rem;font-weight:600;color:#9ca3af;
-                text-transform:uppercase;letter-spacing:.1em;margin-top:1px;">
-                AI Study Platform</div>
-            </div>
-          </div>
-          <div style="font-size:.875rem;color:#6b7280;line-height:1.7;
-            max-width:280px;margin:0 auto;">
+          <div style="width:64px;height:64px;border-radius:16px;background:#e84c1e;
+            display:flex;align-items:center;justify-content:center;font-size:2rem;
+            margin:0 auto 1rem;box-shadow:0 8px 24px rgba(232,76,30,.35);">══</div>
+          <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.04em;margin-bottom:.25rem;">
+            QuizGenius AI</div>
+          <div style="font-size:.875rem;color:#6b7280;line-height:1.7;max-width:280px;margin:0 auto;">
             Transform any PDF into exam-ready quizzes instantly.</div>
         </div>""", unsafe_allow_html=True)
         t1, t2 = st.columns(2)
@@ -858,51 +1078,50 @@ is_guest = uname == "__guest__"
 dname    = "Guest" if is_guest else uname.capitalize()
 init     = dname[0].upper()
 
-# ── shared logo HTML ─────────────────────────────────────────────
-Q_LOGO = """<div style="width:{sz}px;height:{sz}px;border-radius:{r}px;background:#e84c1e;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  box-shadow:0 4px 14px rgba(232,76,30,.35);">
-  <span style="font-size:{fs};font-weight:900;color:#fff;letter-spacing:-.04em;
-    font-family:'Inter',system-ui,sans-serif;line-height:1;">{ltr}</span>
-</div>"""
-
-def q_logo(sz=32, r=9, fs="1rem", ltr="Q"):
-    return Q_LOGO.format(sz=sz, r=r, fs=fs, ltr=ltr)
-
-# ── NAVBAR — 7 columns: logo | nav links x5 | avatar+name | logout ──
-nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.0,.58,.76,.54,.88,.54,1.7,.28])
+nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.2,.72,.95,.68,1.05,.68,2.6,0.01])
 with nb0:
-    st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;
-      height:64px;white-space:nowrap;flex-shrink:0;">
-      {q_logo(32, 9, "1rem", "Q")}
+    st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;">
+      <div style="width:32px;height:32px;border-radius:9px;background:#e84c1e;
+        display:flex;align-items:center;justify-content:center;flex-shrink:0;
+        box-shadow:0 4px 14px rgba(232,76,30,.35);">
+        <span style="font-size:1rem;font-weight:900;color:#fff;letter-spacing:-.04em;
+          font-family:'Inter',system-ui,sans-serif;line-height:1;">Q</span></div>
       <div style="line-height:1.15;">
-        <div style="font-size:.88rem;font-weight:800;color:#111;letter-spacing:-.02em;
-          white-space:nowrap;">QuizGenius <span style="color:#e84c1e;">AI</span></div>
+        <div style="font-size:.88rem;font-weight:800;color:#111;letter-spacing:-.02em;white-space:nowrap;">
+          QuizGenius <span style="color:#e84c1e;">AI</span></div>
         <div style="font-size:.5rem;font-weight:600;color:#9ca3af;
           text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;">AI Study Platform</div>
       </div>
     </div>""", unsafe_allow_html=True)
 with nb1:
-    if st.button("Home",      key="n_home",  type="primary" if cp=="Home"                        else "secondary"): go("Home")
+    if st.button("Home",      key="n_home",  type="primary" if cp=="Home"                         else "secondary"): go("Home")
 with nb2:
-    if st.button("Generate",  key="n_gen",   type="primary" if cp=="Generate"                    else "secondary"): go("Generate")
+    if st.button("Generate",  key="n_gen",   type="primary" if cp=="Generate"                     else "secondary"): go("Generate")
 with nb3:
-    if st.button("Study",     key="n_study", type="primary" if cp in("Study","Flashcard","Test") else "secondary", disabled=not gen_ok): go("Study")
+    if st.button("Study",     key="n_study", type="primary" if cp in("Study","Flashcard","Test")  else "secondary", disabled=not gen_ok): go("Study")
 with nb4:
-    if st.button("Dashboard", key="n_dash",  type="primary" if cp=="Dashboard"                   else "secondary"): go("Dashboard")
+    if st.button("Dashboard", key="n_dash",  type="primary" if cp=="Dashboard"                    else "secondary"): go("Dashboard")
 with nb5:
-    if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary"): go("About")
+    if st.button("About",     key="n_about", type="primary" if cp=="About"                        else "secondary"): go("About")
 with nb6:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:8px;
-      justify-content:flex-end;height:64px;width:100%;padding-right:2px;">
+      justify-content:flex-end;height:64px;width:100%;">
+      <div style="background:#e84c1e;color:#fff;border-radius:999px;
+        padding:.3rem .875rem;font-size:.72rem;font-weight:700;white-space:nowrap;">⬆ Upgrade Pro</div>
+      <div style="width:1px;height:20px;background:#e5e7eb;margin:0 4px;"></div>
       <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
         display:flex;align-items:center;justify-content:center;
-        font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
-      <span style="font-size:.82rem;font-weight:600;color:#374151;
-        white-space:nowrap;flex-shrink:0;">{S(dname)}</span>
+        font-size:.75rem;font-weight:800;color:#fff;">{init}</div>
+      <span style="font-size:.8rem;font-weight:600;color:#374151;white-space:nowrap;">{S(dname)}</span>
+      <div style="width:1px;height:16px;background:#e5e7eb;margin:0 2px;"></div>
+      <span style="font-size:.72rem;font-weight:600;color:#9ca3af;cursor:pointer;white-space:nowrap;"
+        onmouseenter="this.style.color='#e84c1e'" onmouseleave="this.style.color='#9ca3af'"
+        onclick="(function(){{var b=window.parent.document.querySelectorAll('button');
+          for(var i=0;i<b.length;i++){{if(b[i].innerText.trim()==='_lo_'){{b[i].click();break;}}}}}})()">
+        Sign out</span>
     </div>""", unsafe_allow_html=True)
 with nb7:
-    if st.button("→", key="n_logout", help="Sign out", type="secondary"):
+    if st.button("_lo_", key="n_logout", type="secondary"):
         for k in list(st.session_state.keys()): del st.session_state[k]
         st.rerun()
 
@@ -912,7 +1131,7 @@ if not get_key() and cp == "Generate":
       padding:.875rem 1.375rem;margin:1rem 2rem;font-size:.875rem;color:#92400e;">
       ⚠️ <strong>Groq API key not set.</strong> Add <code>GROQ_API_KEY</code> in Render environment.
     </div>""", unsafe_allow_html=True)
-    with st.expander("🔑 Enter Groq API Key (session only)"):
+    with st.expander("══ Enter Groq API Key (session only)"):
         ki = st.text_input("Key", type="password", placeholder="gsk_...", label_visibility="collapsed")
         if ki: st.session_state.groq_key_input = ki; st.success("Saved for this session.")
 
@@ -950,11 +1169,11 @@ if cp == "Home":
         border:1.5px solid #f3f4f6;border-radius:8px;">D) Break down waste via autophagy</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;margin-top:.875rem;">
         <div style="background:#f9fafb;color:#6b7280;border-radius:7px;padding:.45rem;
-          text-align:center;font-size:.58rem;font-weight:700;border:1.5px solid #e5e7eb;">📖 Study</div>
+          text-align:center;font-size:.58rem;font-weight:700;border:1.5px solid #e5e7eb;">══ Study</div>
         <div style="background:#e84c1e;color:#fff;border-radius:7px;padding:.45rem;
-          text-align:center;font-size:.58rem;font-weight:700;">🎴 Cards</div>
+          text-align:center;font-size:.58rem;font-weight:700;">══ Cards</div>
         <div style="background:#f0fdf4;color:#16a34a;border-radius:7px;padding:.45rem;
-          text-align:center;font-size:.58rem;font-weight:700;border:1.5px solid #bbf7d0;">🎯 Test</div>
+          text-align:center;font-size:.58rem;font-weight:700;border:1.5px solid #bbf7d0;">══ Test</div>
       </div></div>"""
 
     st.markdown(f"""<div class="hs"><div class="hi">
@@ -964,21 +1183,17 @@ if cp == "Home":
         <p class="hp">QuizGenius AI transforms your study material into adaptive flashcards,
         MCQs, True/False, and fill-in-the-blank quizzes — powered by Groq's Llama 3.1.</p>
         <div class="pr">
-          <div class="pi">📄 PDF &amp; OCR</div><div class="pi">🎴 Flashcards</div>
-          <div class="pi">⏱ Timed Tests</div><div class="pi">📊 Analytics</div>
+          <div class="pi">══ PDF &amp; OCR</div><div class="pi">══ Flashcards</div>
+          <div class="pi">⏱ Timed Tests</div><div class="pi">══ Analytics</div>
         </div>
       </div><div>{mockup}</div>
     </div></div>""", unsafe_allow_html=True)
 
-    # CTA buttons — full width, centered, equal
-    st.markdown("""<div style="max-width:1280px;margin:0 auto;padding:0 2rem;">""",
-                unsafe_allow_html=True)
-    hb1, hb2 = st.columns(2, gap="medium")
-    with hb1:
-        if st.button("⚡  Start Generating Now", key="hcta",  type="primary",  use_container_width=True): go("Generate")
+    hb1,hb2,hb3 = st.columns([1,1.4,1.1])
     with hb2:
-        if st.button("📊  My Dashboard",          key="hdash", type="secondary", use_container_width=True): go("Dashboard")
-    st.markdown("</div>", unsafe_allow_html=True)
+        if st.button("⚡  Start Generating Now", key="hcta", type="primary", use_container_width=True): go("Generate")
+    with hb3:
+        if st.button("══  My Dashboard", key="hdash", type="secondary", use_container_width=True): go("Dashboard")
 
     st.markdown(f"""<div class="sb"><div class="si">
       <div class="si-c"><span class="si-n">{tqg if tqg else "10K+"}</span><span class="si-l">Questions Generated</span></div>
@@ -992,13 +1207,13 @@ if cp == "Home":
       <div class="sec-ti">Three steps to smarter study</div>
       <p class="sec-su">Upload any PDF, let AI generate questions, then study and test yourself.</p>
       <div class="hwg">
-        <div class="hwc" data-n="1"><div class="hwi">📄</div>
+        <div class="hwc" data-n="1"><div class="hwi">══</div>
           <div class="hwt">1. Upload Your PDF</div>
           <p class="hwp">Drag and drop any study material. OCR handles scanned documents automatically.</p></div>
-        <div class="hwc" data-n="2"><div class="hwi">🧠</div>
+        <div class="hwc" data-n="2"><div class="hwi">══</div>
           <div class="hwt">2. AI Generates Questions</div>
           <p class="hwp">Groq-powered Llama 3.1 extracts key concepts and creates questions in seconds.</p></div>
-        <div class="hwc" data-n="3"><div class="hwi">🎯</div>
+        <div class="hwc" data-n="3"><div class="hwi">══</div>
           <div class="hwt">3. Study &amp; Excel</div>
           <p class="hwp">Flip flashcards, bookmark tough spots, take timed tests, and track improvement.</p></div>
       </div></div></div>""", unsafe_allow_html=True)
@@ -1008,25 +1223,25 @@ if cp == "Home":
       <div class="sec-ti">Everything you need to excel</div>
       <p class="sec-su">Built for serious learners and exam preparation.</p>
       <div class="fg" style="margin-top:2rem;">
-        <div class="fcc"><div class="fci">🎴</div><div><div class="fct">Flashcard Mode</div>
+        <div class="fcc"><div class="fci">══</div><div><div class="fct">Flashcard Mode</div>
           <div class="fcs">3D flip cards with progress tracking and bookmarks.</div></div></div>
         <div class="fcc"><div class="fci">⭐</div><div><div class="fct">Smart Bookmarks</div>
           <div class="fcs">Star tough questions and revisit them anytime.</div></div></div>
-        <div class="fcc"><div class="fci">🎯</div><div><div class="fct">Auto Difficulty Detection</div>
+        <div class="fcc"><div class="fci">══</div><div><div class="fct">Auto Difficulty Detection</div>
           <div class="fcs">AI analyses your PDF and recommends the right level.</div></div></div>
         <div class="fcc"><div class="fci">❌</div><div><div class="fct">Wrong Answer Tracker</div>
           <div class="fcs">Mistakes are saved so you can target weak spots.</div></div></div>
         <div class="fcc"><div class="fci">⏱</div><div><div class="fct">Per-Question Timer</div>
           <div class="fcs">Countdown per question to simulate real exam pressure.</div></div></div>
-        <div class="fcc"><div class="fci">📊</div><div><div class="fct">Score History &amp; Chart</div>
+        <div class="fcc"><div class="fci">══</div><div><div class="fct">Score History &amp; Chart</div>
           <div class="fcs">Track every test and visualise improvement over time.</div></div></div>
-        <div class="fcc"><div class="fci">🗂️</div><div><div class="fct">Topic Filter</div>
+        <div class="fcc"><div class="fci">══️</div><div><div class="fct">Topic Filter</div>
           <div class="fcs">Focus generation on specific chapters or sections.</div></div></div>
-        <div class="fcc"><div class="fci">🔀</div><div><div class="fct">3 Question Types</div>
+        <div class="fcc"><div class="fci">══</div><div><div class="fct">3 Question Types</div>
           <div class="fcs">MCQ, True/False, or Fill-in-the-blank.</div></div></div>
-        <div class="fcc"><div class="fci">👁</div><div><div class="fct">Live Preview</div>
+        <div class="fcc"><div class="fci">══</div><div><div class="fct">Live Preview</div>
           <div class="fcs">Preview a real question before generating the full set.</div></div></div>
-        <div class="fcc"><div class="fci">📤</div><div><div class="fct">Export as HTML</div>
+        <div class="fcc"><div class="fci">══</div><div><div class="fct">Export as HTML</div>
           <div class="fcs">Download a formatted quiz sheet for offline study.</div></div></div>
       </div></div></div>""", unsafe_allow_html=True)
 
@@ -1037,15 +1252,15 @@ if cp == "Home":
       <div class="dfg">
         <div class="dfc e">
           <span class="badge b-gr">Foundational</span>
-          <div class="dfn">🌱 Easy</div>
+          <div class="dfn">══ Easy</div>
           <p class="dfd">Direct recall, key terminology, foundational concepts. 5 test questions.</p></div>
         <div class="dfc m">
           <span class="badge b-or">Intermediate</span>
-          <div class="dfn">📈 Medium</div>
+          <div class="dfn">══ Medium</div>
           <p class="dfd">Applied comprehension, connecting concepts. 7 test questions.</p></div>
         <div class="dfc h">
           <span class="badge b-re">Mastery</span>
-          <div class="dfn">🔥 Hard</div>
+          <div class="dfn">══ Hard</div>
           <p class="dfd">Advanced synthesis and critical analysis. 10 questions.</p></div>
       </div></div></div>""", unsafe_allow_html=True)
 
@@ -1053,7 +1268,7 @@ if cp == "Home":
       <div class="ft-top">
         <div>
           <div class="ft-brand">
-            <div class="ft-logo" style="display:flex;align-items:center;justify-content:center;"><span style="font-size:.85rem;font-weight:900;color:#fff;font-family:'Inter',system-ui,sans-serif;line-height:1;">Q</span></div><span class="ft-name">QuizGenius AI</span></div>
+            <div class="ft-logo">══</div><span class="ft-name">QuizGenius AI</span></div>
           <p class="ft-desc">Transform any PDF into an adaptive learning experience.
             Powered by Groq + Llama 3.1.</p></div>
         <div><div class="ft-hd">Product</div>
@@ -1076,25 +1291,22 @@ if cp == "Home":
 # GENERATE PAGE
 # ════════════════════════════════════════════════════════════════
 elif cp == "Generate":
-    st.markdown("""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
-      padding:1.5rem 2rem 1.25rem;">
-      <div style="max-width:1280px;margin:0 auto;">
-        <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;
-          letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Workspace › AI Creation</div>
-        <div style="font-size:1.6rem;font-weight:800;color:#111;letter-spacing:-.03em;">
-          Generate Study Material</div>
-        <div style="font-size:.875rem;color:#6b7280;margin-top:.2rem;">
-          Transform your documents into high-quality assessments instantly.</div>
-      </div>
-    </div>
-    <div class="fw" style="padding-top:.75rem;">""", unsafe_allow_html=True)
+    st.markdown('<div class="fw" style="padding-top:2rem;">', unsafe_allow_html=True)
+    st.markdown("""<div style="margin-bottom:1.5rem;">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
+        letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">Workspace › AI Creation</div>
+      <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">
+        Generate Study Material</div>
+      <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
+        Transform your documents into high-quality assessments instantly.</div>
+    </div>""", unsafe_allow_html=True)
 
     left_col, right_col = st.columns([1, 0.52], gap="large")
 
     with left_col:
         if not st.session_state.pdf_text.strip():
             st.markdown('<div class="cfg">', unsafe_allow_html=True)
-            st.markdown("""<div class="cfg-lbl">📄 Upload PDF or Document</div>
+            st.markdown("""<div class="cfg-lbl">══ Upload PDF or Document</div>
             <div class="cfg-hint">Drag and drop your lecture notes, textbooks, or research papers.</div>
             """, unsafe_allow_html=True)
             uf = st.file_uploader("Upload PDF", type="pdf", label_visibility="collapsed")
@@ -1123,20 +1335,18 @@ elif cp == "Generate":
             dd       = st.session_state.detected_difficulty
             dcol     = {"Easy":"#22c55e","Medium":"#e84c1e","Hard":"#ef4444"}.get(dd,"#e84c1e")
 
-            pb1, pb2 = st.columns([5, 1])
+            pb1, pb2 = st.columns([5,1])
             with pb1:
-                st.markdown(f"""<div class="pdf-bn" style="margin-bottom:0;">
-                  <div class="pdf-ic">📄</div>
+                st.markdown(f"""<div class="pdf-bn">
+                  <div class="pdf-ic">══</div>
                   <div style="flex:1;min-width:0;">
                     <div style="font-size:.9rem;font-weight:700;color:#111;">{S(fn)}</div>
                     <div style="font-size:.72rem;color:#9ca3af;margin-top:.125rem;">{wc:,} words · {sz:.1f} KB ·
                       AI suggests: <span style="color:{dcol};font-weight:700;">{dd}</span></div>
                   </div></div>""", unsafe_allow_html=True)
             with pb2:
-                st.markdown('<div style="padding-top:8px;">', unsafe_allow_html=True)
                 if st.button("Change", key="chg_pdf", type="secondary", use_container_width=True):
                     clear_pdf(); st.rerun()
-                st.markdown('</div>', unsafe_allow_html=True)
 
             s1,s2,s3,s4 = st.columns(4)
             for col,lbl,val in [(s1,"Words",f"{wc:,}"),(s2,"Characters",f"{len(pdf_text):,}"),
@@ -1151,7 +1361,7 @@ elif cp == "Generate":
                     </div>""", unsafe_allow_html=True)
 
             if st.session_state.topics:
-                with st.expander(f"🗂️ Topic Filter — {len(st.session_state.topics)} sections detected"):
+                with st.expander(f"══️ Topic Filter — {len(st.session_state.topics)} sections detected"):
                     st.caption("Select sections to focus on. Leave empty for full document.")
                     sel = st.multiselect("Topics", st.session_state.topics,
                                          default=st.session_state.selected_topics,
@@ -1178,7 +1388,7 @@ elif cp == "Generate":
             cqt = st.session_state.q_type
             qa1,qa2,qa3 = st.columns(3)
             for col,qt,ico,lbl,sub in [
-                (qa1,"MCQ","📝","Multiple Choice","4 options, 1 correct"),
+                (qa1,"MCQ","══","Multiple Choice","4 options, 1 correct"),
                 (qa2,"TF","✅","True / False","Fact-based statements"),
                 (qa3,"FIB","✏️","Fill in Blank","Complete the sentence")]:
                 with col:
@@ -1200,7 +1410,7 @@ elif cp == "Generate":
                         unsafe_allow_html=True)
             cur_d = st.session_state.detected_difficulty
             d1,d2,d3 = st.columns(3)
-            for col,dname,ico in [(d1,"Easy","🌱"),(d2,"Medium","📈"),(d3,"Hard","🔥")]:
+            for col,dname,ico in [(d1,"Easy","══"),(d2,"Medium","══"),(d3,"Hard","══")]:
                 with col:
                     sel_cls = {"Easy":"border:1.5px solid #22c55e;background:#f0fdf4;",
                                "Medium":"border:1.5px solid #e84c1e;background:#fff7ed;",
@@ -1227,7 +1437,7 @@ elif cp == "Generate":
                 qt_label = {"MCQ":"Multiple Choice","TF":"True/False","FIB":"Fill-in-the-Blank"}.get(
                     st.session_state.q_type,"")
                 st.success(f"✅ Generated {len(st.session_state.questions)} {qt_label} questions!")
-                if st.button("📖  Open Study Mode →", type="secondary",
+                if st.button("══  Open Study Mode →", type="secondary",
                               use_container_width=True, key="open_study_final"):
                     go("Study")
 
@@ -1290,12 +1500,12 @@ elif cp == "Generate":
                     st.session_state.generation_done    = True
                     st.rerun()
 
-    # RIGHT PANEL — Live Preview (sticky, aligned with left column top)
+    # RIGHT PANEL — Live Preview
     with right_col:
-        st.markdown("""<div style="position:sticky;top:72px;">""", unsafe_allow_html=True)
+        st.markdown("""<div style="position:sticky;top:80px;">""", unsafe_allow_html=True)
         st.markdown("""<div class="gp">
           <div class="gp-hd">
-            <span class="gp-ti">🔍 Live Preview</span>
+            <span class="gp-ti">══ Live Preview</span>
             <span class="badge b-or">SAMPLE</span>
           </div>""", unsafe_allow_html=True)
 
@@ -1329,20 +1539,20 @@ elif cp == "Generate":
                         </div>""", unsafe_allow_html=True)
                 st.markdown("""<div style="margin:1rem 1.25rem 1.25rem;padding:.625rem .875rem;
                   background:#f9fafb;border-radius:8px;font-size:.72rem;color:#6b7280;">
-                  💡 This is a real sample question from your document.</div>""",
+                  ══ This is a real sample question from your document.</div>""",
                     unsafe_allow_html=True)
-                if st.button("🔄 New Preview", key="new_prev", type="secondary",
+                if st.button("══ New Preview", key="new_prev", type="secondary",
                               use_container_width=True):
                     st.session_state.show_preview = False
                     st.session_state.preview_question = None
                     st.rerun()
             else:
                 st.markdown("""<div class="gp-em">
-                  <div class="gp-em-ic">📋</div>
+                  <div class="gp-em-ic">══</div>
                   <div class="gp-em-t">No content generated</div>
                   <div class="gp-em-s">Click Preview Sample to see<br>a real question from your document.</div>
                 </div>""", unsafe_allow_html=True)
-                if st.button("👁  Preview Sample Question", type="secondary",
+                if st.button("══  Preview Sample Question", type="secondary",
                               use_container_width=True, key="prev_btn"):
                     if not get_key():
                         st.error("Add your Groq API key first.")
@@ -1367,14 +1577,14 @@ elif cp == "Generate":
                                 st.error(f"Preview failed: {e}")
         else:
             st.markdown("""<div class="gp-em">
-              <div class="gp-em-ic">📄</div>
+              <div class="gp-em-ic">══</div>
               <div class="gp-em-t">Upload a PDF first</div>
               <div class="gp-em-s">Upload a document on the left<br>to enable live preview.</div>
             </div>""", unsafe_allow_html=True)
 
         st.markdown("""<div style="padding:.875rem 1.25rem;border-top:1px solid #f3f4f6;
           background:#fffbeb;border-radius:0 0 12px 12px;">
-          <div style="font-size:.72rem;font-weight:700;color:#d97706;margin-bottom:.25rem;">💡 Pro Tip</div>
+          <div style="font-size:.72rem;font-weight:700;color:#d97706;margin-bottom:.25rem;">══ Pro Tip</div>
           <div style="font-size:.7rem;color:#92400e;line-height:1.65;">
             For best results, upload text-heavy PDFs. Diagrams and handwritten notes may vary.</div>
         </div></div></div>""", unsafe_allow_html=True)
@@ -1389,7 +1599,7 @@ elif cp in ("Study","Flashcard","Test"):
         st.markdown("""<div style="max-width:500px;margin:5rem auto;text-align:center;padding:2rem;">
           <div style="width:72px;height:72px;border-radius:50%;background:#fff7ed;
             border:1.5px solid #fed7aa;display:flex;align-items:center;justify-content:center;
-            font-size:2rem;margin:0 auto 1.25rem;">📄</div>
+            font-size:2rem;margin:0 auto 1.25rem;">══</div>
           <div style="font-size:1.375rem;font-weight:800;color:#111;margin-bottom:.5rem;">No Questions Yet</div>
           <div style="font-size:.875rem;color:#6b7280;margin-bottom:2rem;">Upload a PDF and generate questions first.</div>
         </div>""", unsafe_allow_html=True)
@@ -1404,15 +1614,15 @@ elif cp in ("Study","Flashcard","Test"):
         if st.button("⚡ Regenerate", type="primary"): go("Generate")
         st.stop()
 
-    st.markdown('<div class="fw">', unsafe_allow_html=True)
-    st.markdown('<div style="height:.625rem"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="fw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
+
     tc1,tc2,tc3 = st.columns(3)
     with tc1:
-        if st.button("📖  Study",      key="tab_s", type="primary" if cp=="Study"     else "secondary", use_container_width=True): go("Study")
+        if st.button("══  Study",      key="tab_s", type="primary" if cp=="Study"     else "secondary", use_container_width=True): go("Study")
     with tc2:
-        if st.button("🎴  Flashcards", key="tab_f", type="primary" if cp=="Flashcard" else "secondary", use_container_width=True): go("Flashcard")
+        if st.button("══  Flashcards", key="tab_f", type="primary" if cp=="Flashcard" else "secondary", use_container_width=True): go("Flashcard")
     with tc3:
-        if st.button("🎯  Test",       key="tab_t", type="primary" if cp=="Test"      else "secondary", use_container_width=True):
+        if st.button("══  Test",       key="tab_t", type="primary" if cp=="Test"      else "secondary", use_container_width=True):
             st.session_state.selected_difficulty = None
             st.session_state.has_test_generated  = False
             st.session_state.user_answers        = {}
@@ -1436,11 +1646,11 @@ elif cp in ("Study","Flashcard","Test"):
             fm = st.selectbox("Filter",["All","Bookmarked","Wrong Answers"],
                                label_visibility="collapsed",key="sf")
         with sh3:
-            st.download_button("📤 Export",
+            st.download_button("══ Export",
                 export_html(qs,f"QuizGenius — {fn}").encode(),
                 f"quiz_{fn.replace('.pdf','')}.html","text/html",use_container_width=True)
 
-        with st.expander("📋 Copy all questions as text"):
+        with st.expander("══ Copy all questions as text"):
             st.code("\n\n".join(
                 f"Q{i+1}: {q['question']}\n"+"".join(f"  {o}\n" for o in q['options'])+
                 f"  Answer: {q['correct']}" for i,q in enumerate(qs)),language=None)
@@ -1537,7 +1747,7 @@ elif cp in ("Study","Flashcard","Test"):
                 if st.button("← Prev", key="fp", type="secondary", use_container_width=True):
                     st.session_state.fc_idx=(idx-1)%total; st.rerun()
             with n2:
-                if st.button("🔀 Random", key="fr", type="secondary", use_container_width=True):
+                if st.button("══ Random", key="fr", type="secondary", use_container_width=True):
                     import random; st.session_state.fc_idx=random.randint(0,total-1); st.rerun()
             with n3:
                 if st.button("Next →", key="fn", type="secondary", use_container_width=True):
@@ -1560,7 +1770,7 @@ elif cp in ("Study","Flashcard","Test"):
             st.markdown("""<div style="background:#eff6ff;border:1px solid #bfdbfe;
               border-radius:10px;padding:.875rem 1.375rem;margin-bottom:1.25rem;
               font-size:.875rem;color:#1e40af;">
-              📝 Test questions are generated fresh via Groq — separate from your study set.
+              ══ Test questions are generated fresh via Groq — separate from your study set.
             </div>""", unsafe_allow_html=True)
             tm1,tm2 = st.columns([2,2])
             with tm1:
@@ -1577,26 +1787,26 @@ elif cp in ("Study","Flashcard","Test"):
               <div style="font-size:.875rem;color:#6b7280;">Fresh questions are generated for each level.</div>
             </div>""", unsafe_allow_html=True)
             st.markdown("""<div class="tdg">
-              <div class="tdc"><div class="tdc-ico e">🌱</div>
+              <div class="tdc"><div class="tdc-ico e">══</div>
                 <div class="tdc-n">Beginner</div>
                 <div class="tdc-h">Foundational concepts and direct recall. 5 questions.</div></div>
               <div class="tdc feat"><span class="tdc-pop">POPULAR</span>
-                <div class="tdc-ico m">🎓</div>
+                <div class="tdc-ico m">══</div>
                 <div class="tdc-n">Standard</div>
                 <div class="tdc-h">Applied comprehension scenarios. 7 questions.</div></div>
-              <div class="tdc"><div class="tdc-ico h">🔥</div>
+              <div class="tdc"><div class="tdc-ico h">══</div>
                 <div class="tdc-n">Expert</div>
                 <div class="tdc-h">Complex synthesis and analysis. 10 questions.</div></div>
             </div>""", unsafe_allow_html=True)
             d1,d2,d3 = st.columns(3)
             with d1:
-                if st.button("🌱 Start Easy",   key="easy", use_container_width=True, type="secondary"):
+                if st.button("══ Start Easy",   key="easy", use_container_width=True, type="secondary"):
                     st.session_state.selected_difficulty="Easy"; st.session_state.test_started_at=int(time.time()*1000); st.rerun()
             with d2:
-                if st.button("🎓 Start Medium", key="med",  use_container_width=True, type="primary"):
+                if st.button("══ Start Medium", key="med",  use_container_width=True, type="primary"):
                     st.session_state.selected_difficulty="Medium"; st.session_state.test_started_at=int(time.time()*1000); st.rerun()
             with d3:
-                if st.button("🔥 Start Hard",   key="hard", use_container_width=True, type="secondary"):
+                if st.button("══ Start Hard",   key="hard", use_container_width=True, type="secondary"):
                     st.session_state.selected_difficulty="Hard"; st.session_state.test_started_at=int(time.time()*1000); st.rerun()
 
         elif not st.session_state.has_test_generated:
@@ -1608,11 +1818,9 @@ elif cp in ("Study","Flashcard","Test"):
             else:
                 st.markdown(f"""<div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;
                   padding:2.5rem;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);">
-                  <div style="width:56px;height:56px;border-radius:14px;background:#e84c1e;
-                    display:flex;align-items:center;justify-content:center;
-                    box-shadow:0 6px 20px rgba(232,76,30,.3);margin:0 auto 1rem;">
-                    <span style="font-size:1.5rem;font-weight:900;color:#fff;
-                      font-family:'Inter',system-ui,sans-serif;line-height:1;">Q</span></div>
+                  <div style="width:56px;height:56px;border-radius:50%;background:#fff7ed;
+                    border:1.5px solid #fed7aa;display:flex;align-items:center;justify-content:center;
+                    font-size:1.5rem;margin:0 auto 1rem;">══</div>
                   <div style="font-size:1.125rem;font-weight:800;color:#111;margin-bottom:.375rem;">
                     Generating {diff} Test</div>
                   <div style="font-size:.875rem;color:#6b7280;">Creating {n} fresh questions via Groq Llama 3.1…</div>
@@ -1705,7 +1913,7 @@ elif cp in ("Study","Flashcard","Test"):
             st.markdown("""<div style="background:#fff;border:1.5px solid #e5e7eb;
               border-radius:14px;overflow:hidden;margin-top:.75rem;">
               <div style="padding:1.25rem;border-bottom:1px solid #f3f4f6;">
-                <div style="font-size:.9rem;font-weight:700;color:#111;">📋 Detailed Review</div></div>
+                <div style="font-size:.9rem;font-weight:700;color:#111;">══ Detailed Review</div></div>
               <div style="padding:.875rem 1.25rem;">""", unsafe_allow_html=True)
             for i,q in enumerate(st.session_state.test_questions):
                 ua=st.session_state.user_answers.get(i); ok=ua==q["correct"]
@@ -1729,18 +1937,18 @@ elif cp in ("Study","Flashcard","Test"):
             st.markdown('</div></div>', unsafe_allow_html=True)
             r1,r2,r3,r4 = st.columns(4)
             with r1:
-                if st.button("🔄 Retake", use_container_width=True, type="secondary"):
+                if st.button("══ Retake", use_container_width=True, type="secondary"):
                     st.session_state.user_answers={}; st.session_state.test_submitted=False
                     st.session_state.quiz_key+=1; st.rerun()
             with r2:
-                if st.button("🎯 New Level", use_container_width=True, type="primary"):
+                if st.button("══ New Level", use_container_width=True, type="primary"):
                     st.session_state.selected_difficulty=None
                     st.session_state.has_test_generated=False
                     st.session_state.user_answers={}; st.session_state.test_submitted=False; st.rerun()
             with r3:
-                if st.button("🎴 Flashcards", use_container_width=True, type="secondary"): go("Flashcard")
+                if st.button("══ Flashcards", use_container_width=True, type="secondary"): go("Flashcard")
             with r4:
-                if st.button("📊 Dashboard",  use_container_width=True, type="secondary"): go("Dashboard")
+                if st.button("══ Dashboard",  use_container_width=True, type="secondary"): go("Dashboard")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -1753,26 +1961,23 @@ elif cp == "Dashboard":
     tt=len(sh); avg=round(sum(s["pct"] for s in sh)/max(tt,1),1) if sh else 0
     best=max((s["pct"] for s in sh),default=0)
     un=st.session_state.current_user or "User"
-    greet=f"Welcome back, {un.capitalize()}!" if un!="__guest__" else "Welcome, Guest!"
 
-    st.markdown(f"""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
-      padding:1.5rem 1.5rem 1.25rem;">
-      <div style="max-width:900px;margin:0 auto;">
-        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
-          letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Your Progress › Dashboard</div>
-        <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">Learning Dashboard</div>
-        <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
-          {S(greet)} Track your study patterns and scores.</div>
-      </div>
-    </div>
-    <div class="pw" style="padding-top:.75rem;">""", unsafe_allow_html=True)
+    st.markdown('<div class="pw">', unsafe_allow_html=True)
+    greet=f"Welcome back, {un.capitalize()}!" if un!="__guest__" else "Welcome, Guest!"
+    st.markdown(f"""<div style="margin-bottom:2rem;">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
+        letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">Your Progress › Dashboard</div>
+      <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">Learning Dashboard</div>
+      <div style="font-size:.875rem;color:#6b7280;margin-top:.375rem;">
+        {S(greet)} Track your study patterns and scores.</div>
+    </div>""", unsafe_allow_html=True)
 
     st.markdown(f"""<div class="sg">
-      <div class="sc"><span class="sc-ico">📊</span><div class="sc-val">{tt}</div>
+      <div class="sc"><span class="sc-ico">══</span><div class="sc-val">{tt}</div>
         <div class="sc-lbl">Tests Taken</div></div>
-      <div class="sc"><span class="sc-ico">🎯</span><div class="sc-val">{avg}%</div>
+      <div class="sc"><span class="sc-ico">══</span><div class="sc-val">{avg}%</div>
         <div class="sc-lbl">Avg Score</div></div>
-      <div class="sc"><span class="sc-ico">🏆</span><div class="sc-val">{best}%</div>
+      <div class="sc"><span class="sc-ico">══</span><div class="sc-val">{best}%</div>
         <div class="sc-lbl">Best Score</div></div>
       <div class="sc"><span class="sc-ico">⭐</span><div class="sc-val">{len(bms)}</div>
         <div class="sc-lbl">Bookmarks</div></div>
@@ -1781,7 +1986,7 @@ elif cp == "Dashboard":
     d1,d2 = st.columns(2)
     with d1:
         st.markdown(f"""<div class="sc" style="margin-bottom:.875rem;">
-          <span class="sc-ico">📝</span><div class="sc-val">{len(qs)}</div>
+          <span class="sc-ico">══</span><div class="sc-val">{len(qs)}</div>
           <div class="sc-lbl">Questions Generated</div></div>""", unsafe_allow_html=True)
     with d2:
         st.markdown(f"""<div class="sc" style="margin-bottom:.875rem;">
@@ -1789,22 +1994,22 @@ elif cp == "Dashboard":
           <div class="sc-lbl">Mistakes Tracked</div></div>""", unsafe_allow_html=True)
 
     if len(sh)>=2:
-        st.markdown('<div class="ds-t">📈 Score Trend</div>', unsafe_allow_html=True)
+        st.markdown('<div class="ds-t">══ Score Trend</div>', unsafe_allow_html=True)
         st.markdown('<div class="ch-w">', unsafe_allow_html=True)
         render_score_chart(sh)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown('<div class="ds-t">🗂️ Score History</div>', unsafe_allow_html=True)
+    st.markdown('<div class="ds-t">══️ Score History</div>', unsafe_allow_html=True)
     if not sh:
         st.markdown("""<div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;
           padding:3rem;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-          <div style="font-size:2.5rem;margin-bottom:.75rem;">🧪</div>
+          <div style="font-size:2.5rem;margin-bottom:.75rem;">══</div>
           <div style="font-size:.95rem;font-weight:700;color:#111;">No tests taken yet</div>
           <div style="font-size:.82rem;color:#9ca3af;margin-top:.375rem;">Complete a test to see your history here.</div>
         </div>""", unsafe_allow_html=True)
         _,bc,_ = st.columns([1,1,1])
         with bc:
-            if st.button("🎯 Take a Test Now", type="primary", use_container_width=True): go("Test")
+            if st.button("══ Take a Test Now", type="primary", use_container_width=True): go("Test")
     else:
         for e in reversed(sh):
             pc=e["pct"]; bcol="#22c55e" if pc>=80 else "#e84c1e" if pc>=60 else "#ef4444"
@@ -1823,7 +2028,7 @@ elif cp == "Dashboard":
             </div>""", unsafe_allow_html=True)
         _,cl,_ = st.columns([1,1,1])
         with cl:
-            if st.button("🗑 Clear History", type="secondary", use_container_width=True):
+            if st.button("══ Clear History", type="secondary", use_container_width=True):
                 st.session_state.score_history=[]; persist(); st.rerun()
 
     if was:
@@ -1839,9 +2044,9 @@ elif cp == "Dashboard":
         if len(was)>5: st.caption(f"+ {len(was)-5} more. See all in Study → Wrong Answers.")
         w1,w2=st.columns(2)
         with w1:
-            if st.button("📖 Review Wrong Answers",  type="secondary", use_container_width=True): go("Study")
+            if st.button("══ Review Wrong Answers",  type="secondary", use_container_width=True): go("Study")
         with w2:
-            if st.button("🎴 Flashcard Mistakes", type="secondary", use_container_width=True):
+            if st.button("══ Flashcard Mistakes", type="secondary", use_container_width=True):
                 st.session_state.fc_filter="Mistakes"; go("Flashcard")
 
     if bms:
@@ -1853,12 +2058,12 @@ elif cp == "Dashboard":
                   <div class="rv-q">{S(qs[bi]['question'])}</div>
                 </div>""", unsafe_allow_html=True)
         if len(bms)>3: st.caption(f"+ {len(bms)-3} more bookmarks.")
-        if st.button("📖 Study Bookmarks", type="secondary"): go("Study")
+        if st.button("══ Study Bookmarks", type="secondary"): go("Study")
 
     if un=="__guest__":
         st.markdown("""<div style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;
           padding:1rem 1.375rem;font-size:.875rem;color:#92400e;margin-top:1.25rem;">
-          💡 <strong>Guest mode</strong> — data resets on page refresh. Create an account to keep data.</div>""",
+          ══ <strong>Guest mode</strong> — data resets on page refresh. Create an account to keep data.</div>""",
             unsafe_allow_html=True)
         _,bc3,_ = st.columns([1,1,1])
         with bc3:
@@ -1871,29 +2076,26 @@ elif cp == "Dashboard":
 # ABOUT
 # ════════════════════════════════════════════════════════════════
 elif cp == "About":
-    st.markdown("""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
-      padding:1.5rem 1.5rem 1.25rem;">
-      <div style="max-width:960px;margin:0 auto;">
-        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
-          letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">QuizGenius AI › About</div>
-        <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">About QuizGenius AI</div>
-        <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
-          Revolutionising learning through adaptive AI-powered assessments.</div>
-      </div>
-    </div>
-    <div class="aw" style="padding-top:.75rem;">""", unsafe_allow_html=True)
+    st.markdown('<div class="aw">', unsafe_allow_html=True)
+    st.markdown("""<div style="margin-bottom:2rem;">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
+        letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">QuizGenius AI › About</div>
+      <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">About QuizGenius AI</div>
+      <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
+        Revolutionising learning through adaptive AI-powered assessments.</div>
+    </div>""", unsafe_allow_html=True)
     cs = "background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;padding:1.875rem;margin-bottom:1.125rem;box-shadow:0 1px 4px rgba(0,0,0,.06);"
     ct2 = "font-size:.95rem;font-weight:700;color:#111;margin-bottom:.625rem;"
     cp2 = "font-size:.875rem;color:#374151;line-height:1.85;"
     a1,a2 = st.columns(2)
     with a1:
         st.markdown(f"""<div style="{cs}">
-          <div style="{ct2}">🧠 Our Mission</div>
+          <div style="{ct2}">══ Our Mission</div>
           <p style="{cp2}">QuizGenius AI empowers students and professionals to study smarter.
           Groq-powered Llama 3.1 generates adaptive quizzes with real-time progress tracking.
           Fast, free, and deployed on Render.</p></div>""", unsafe_allow_html=True)
         st.markdown(f"""<div style="{cs}">
-          <div style="{ct2}">🚀 Technology Stack</div>
+          <div style="{ct2}">══ Technology Stack</div>
           <p style="{cp2}">
             <strong style="color:#e84c1e;">Llama 3.1</strong> — via Groq API (llama-3.1-8b-instant)<br>
             <strong style="color:#e84c1e;">LangChain</strong> — document splitting<br>
@@ -1905,14 +2107,14 @@ elif cp == "About":
         st.markdown(f"""<div style="{cs}">
           <div style="{ct2}">✨ Key Features</div>
           <p style="{cp2}">
-            🎴 Flashcard mode with 3D flip<br>⭐ Bookmark questions<br>
-            🎯 Auto difficulty detection<br>❌ Wrong answer tracker<br>
-            ⏱ Per-question timed mode<br>📊 Score history + chart<br>
-            🗂️ Topic / chapter filter<br>🔀 MCQ / True-False / Fill-in-Blank<br>
-            👁 Live preview before generation<br>📤 Export as formatted HTML<br>
+            ══ Flashcard mode with 3D flip<br>⭐ Bookmark questions<br>
+            ══ Auto difficulty detection<br>❌ Wrong answer tracker<br>
+            ⏱ Per-question timed mode<br>══ Score history + chart<br>
+            ══️ Topic / chapter filter<br>══ MCQ / True-False / Fill-in-Blank<br>
+            ══ Live preview before generation<br>══ Export as formatted HTML<br>
             ⚡ Groq-powered speed</p></div>""", unsafe_allow_html=True)
         st.markdown(f"""<div style="{cs}">
-          <div style="{ct2}">📞 Connect</div>
+          <div style="{ct2}">══ Connect</div>
           <a href="https://www.linkedin.com/in/vishwas-patel-ba91a2288/" target="_blank"
             style="display:flex;align-items:center;gap:.75rem;padding:.625rem .875rem;
             background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;
