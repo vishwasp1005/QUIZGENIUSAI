@@ -29,7 +29,6 @@ _D = {
     "detected_difficulty":"Medium","topics":[],"selected_topics":[],"q_type":"MCQ",
     "fc_idx":0,"fc_filter":"All","timed_mode":False,"per_q_time":45,
     "preview_question":None,"show_preview":False,"groq_key_input":"",
-    "_logout_cb":False,
 }
 for k,v in _D.items():
     if k not in st.session_state: st.session_state[k] = v
@@ -513,15 +512,14 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
   [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* Hide logout checkbox — offscreen but JS-clickable (no pointer-events:none) */
+/* Hide logout block — display:none kills layout space; JS .click() still works on hidden elements */
 [data-testid="stAppViewBlockContainer"]>div:nth-child(2){
-  position:absolute!important;left:-9999px!important;top:-9999px!important;
-  width:0!important;height:0!important;overflow:hidden!important;}
+  display:none!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
 /* PDF banner Change button — vertically centered */
 [data-testid="stButton"]>button{vertical-align:middle!important;}
-/* Kill ALL Streamlit-injected top spacing on the main content area */
+/* Kill ALL Streamlit-injected top spacing */
 [data-testid="stAppViewBlockContainer"]>div:not(:first-child){
   margin-top:0!important;padding-top:0!important;}
 [data-testid="stMainBlockContainer"]{padding-top:0!important;margin-top:0!important;}
@@ -886,10 +884,11 @@ with nb6:
         white-space:nowrap;flex-shrink:0;">{S(dname)}</span>
       <div title="Sign out"
         onclick="(function(){{
-          var cb=window.parent.document.querySelector('input[type=checkbox][aria-label=\\"_lgcb\\"]');
-          if(!cb){{var all=window.parent.document.querySelectorAll('input[type=checkbox]');
-            cb=all[0];}}
-          if(cb)cb.click();
+          var c=window.parent.document;
+          var b=c.querySelector('[data-testid=stAppViewBlockContainer]>div:nth-child(2) button');
+          if(b){{b.click();return;}}
+          var all=c.querySelectorAll('button');
+          for(var i=0;i<all.length;i++){{if(all[i].innerText.trim()==='__LO__'){{all[i].click();return;}}}}
         }})()"
         style="width:34px;height:34px;border-radius:8px;border:1.5px solid #e5e7eb;
           background:#fff;display:flex;align-items:center;justify-content:center;
@@ -906,10 +905,9 @@ with nb6:
       </div>
     </div>""", unsafe_allow_html=True)
 
-# Logout checkbox — rendered as 2nd child div, hidden offscreen via CSS above
-# JS clicks it → Python detects → clears session → reruns to login
-_lgcb = st.checkbox("_lgcb", key="_logout_cb", label_visibility="hidden")
-if _lgcb:
+# Hidden logout button — CSS display:none hides it + kills layout space
+# Native JS .click() still fires on display:none elements (confirmed browser behaviour)
+if st.button("__LO__", key="n_logout"):
     for k in list(st.session_state.keys()): del st.session_state[k]
     st.rerun()
 
@@ -1095,7 +1093,7 @@ elif cp == "Generate":
           Transform your documents into high-quality assessments instantly.</div>
       </div>
     </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="fw" style="padding-top:.75rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="fw" style="padding-top:.25rem;">', unsafe_allow_html=True)
 
     left_col, right_col = st.columns([1, 0.52], gap="large")
 
@@ -1773,7 +1771,7 @@ elif cp == "Dashboard":
           {S(greet)} Track your study patterns and scores.</div>
       </div>
     </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="pw" style="padding-top:1rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="pw" style="padding-top:.25rem;">', unsafe_allow_html=True)
 
     st.markdown(f"""<div class="sg">
       <div class="sc"><span class="sc-ico">📊</span><div class="sc-val">{tt}</div>
@@ -1889,7 +1887,7 @@ elif cp == "About":
           Revolutionising learning through adaptive AI-powered assessments.</div>
       </div>
     </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="aw" style="padding-top:.75rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="aw" style="padding-top:.25rem;">', unsafe_allow_html=True)
     cs = "background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;padding:1.875rem;margin-bottom:1.125rem;box-shadow:0 1px 4px rgba(0,0,0,.06);"
     ct2 = "font-size:.95rem;font-weight:700;color:#111;margin-bottom:.625rem;"
     cp2 = "font-size:.875rem;color:#374151;line-height:1.85;"
