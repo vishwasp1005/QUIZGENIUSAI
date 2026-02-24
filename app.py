@@ -513,17 +513,32 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
   [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
 /* Hide logout block — display:none kills layout space; JS .click() still works on hidden elements */
-[data-testid="stAppViewBlockContainer"]>div:nth-child(2){
-  display:none!important;}
+/* ── Logout button in nb7 — styled as door icon ── */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button{
+  width:34px!important;height:34px!important;min-width:34px!important;
+  border-radius:8px!important;border:1.5px solid #e5e7eb!important;
+  background:#fff!important;color:transparent!important;font-size:0!important;
+  padding:0!important;box-shadow:none!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpolyline points='16 17 21 12 16 7'/%3E%3Cline x1='21' y1='12' x2='9' y2='12'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important;background-position:center!important;
+  background-size:15px 15px!important;transition:all .15s!important;transform:none!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:hover{
+  background-color:#fff7ed!important;border-color:#e84c1e!important;transform:none!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%23e84c1e' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpolyline points='16 17 21 12 16 7'/%3E%3Cline x1='21' y1='12' x2='9' y2='12'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important;background-position:center!important;
+  background-size:15px 15px!important;box-shadow:none!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
-/* PDF banner Change button — vertically centered */
-[data-testid="stButton"]>button{vertical-align:middle!important;}
-/* Kill ALL Streamlit-injected top spacing */
+/* Kill ALL Streamlit block gaps between page elements */
 [data-testid="stAppViewBlockContainer"]>div:not(:first-child){
   margin-top:0!important;padding-top:0!important;}
 [data-testid="stMainBlockContainer"]{padding-top:0!important;margin-top:0!important;}
 section[data-testid="stMain"]>div{padding-top:0!important;}
+/* Zero gap between consecutive stElementContainer blocks */
+[data-testid="stElementContainer"]{margin-bottom:0!important;}
+[data-testid="stVerticalBlock"]>div{gap:0!important;}
 /* LAYOUTS */
 .pw{max-width:900px;margin:0 auto;padding:.5rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
@@ -851,8 +866,8 @@ Q_LOGO = """<div style="width:{sz}px;height:{sz}px;border-radius:{r}px;backgroun
 def q_logo(sz=32, r=9, fs="1rem", ltr="Q"):
     return Q_LOGO.format(sz=sz, r=r, fs=fs, ltr=ltr)
 
-# ── NAVBAR — 6 columns, all items on one horizontal line ─────────
-nb0,nb1,nb2,nb3,nb4,nb5,nb6 = st.columns([2.0, .58, .76, .54, .88, .54, 1.9])
+# ── NAVBAR — 7 columns: logo | nav links x5 | avatar+name | logout ──
+nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.0,.58,.76,.54,.88,.54,1.7,.28])
 with nb0:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;
       height:64px;white-space:nowrap;flex-shrink:0;">
@@ -876,40 +891,18 @@ with nb5:
     if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary"): go("About")
 with nb6:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:8px;
-      justify-content:flex-end;height:64px;width:100%;padding-right:4px;">
+      justify-content:flex-end;height:64px;width:100%;padding-right:2px;">
       <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
         display:flex;align-items:center;justify-content:center;
         font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
       <span style="font-size:.82rem;font-weight:600;color:#374151;
         white-space:nowrap;flex-shrink:0;">{S(dname)}</span>
-      <div title="Sign out"
-        onclick="(function(){{
-          var c=window.parent.document;
-          var b=c.querySelector('[data-testid=stAppViewBlockContainer]>div:nth-child(2) button');
-          if(b){{b.click();return;}}
-          var all=c.querySelectorAll('button');
-          for(var i=0;i<all.length;i++){{if(all[i].innerText.trim()==='__LO__'){{all[i].click();return;}}}}
-        }})()"
-        style="width:34px;height:34px;border-radius:8px;border:1.5px solid #e5e7eb;
-          background:#fff;display:flex;align-items:center;justify-content:center;
-          flex-shrink:0;cursor:pointer;color:#6b7280;
-          transition:background .15s,border-color .15s,color .15s;"
-        onmouseenter="this.style.background='#fff7ed';this.style.borderColor='#e84c1e';this.style.color='#e84c1e'"
-        onmouseleave="this.style.background='#fff';this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-          <polyline points="16 17 21 12 16 7"/>
-          <line x1="21" y1="12" x2="9" y2="12"/>
-        </svg>
-      </div>
     </div>""", unsafe_allow_html=True)
-
-# Hidden logout button — CSS display:none hides it + kills layout space
-# Native JS .click() still fires on display:none elements (confirmed browser behaviour)
-if st.button("__LO__", key="n_logout"):
-    for k in list(st.session_state.keys()): del st.session_state[k]
-    st.rerun()
+with nb7:
+    # Real st.button — CSS above styles it as a door icon, hides text
+    if st.button("·", key="n_logout", help="Sign out", type="secondary"):
+        for k in list(st.session_state.keys()): del st.session_state[k]
+        st.rerun()
 
 # API key warning (Generate page only)
 if not get_key() and cp == "Generate":
@@ -1081,9 +1074,8 @@ if cp == "Home":
 # GENERATE PAGE
 # ════════════════════════════════════════════════════════════════
 elif cp == "Generate":
-    # White header band matching home hero start position
     st.markdown("""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
-      padding:1.5rem 2rem 1.25rem;margin-bottom:0;">
+      padding:1.5rem 2rem 1.25rem;">
       <div style="max-width:1280px;margin:0 auto;">
         <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;
           letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Workspace › AI Creation</div>
@@ -1092,8 +1084,8 @@ elif cp == "Generate":
         <div style="font-size:.875rem;color:#6b7280;margin-top:.2rem;">
           Transform your documents into high-quality assessments instantly.</div>
       </div>
-    </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="fw" style="padding-top:.25rem;">', unsafe_allow_html=True)
+    </div>
+    <div class="fw" style="padding-top:.75rem;">""", unsafe_allow_html=True)
 
     left_col, right_col = st.columns([1, 0.52], gap="large")
 
@@ -1770,8 +1762,8 @@ elif cp == "Dashboard":
         <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
           {S(greet)} Track your study patterns and scores.</div>
       </div>
-    </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="pw" style="padding-top:.25rem;">', unsafe_allow_html=True)
+    </div>
+    <div class="pw" style="padding-top:.75rem;">""", unsafe_allow_html=True)
 
     st.markdown(f"""<div class="sg">
       <div class="sc"><span class="sc-ico">📊</span><div class="sc-val">{tt}</div>
@@ -1886,8 +1878,8 @@ elif cp == "About":
         <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
           Revolutionising learning through adaptive AI-powered assessments.</div>
       </div>
-    </div>""", unsafe_allow_html=True)
-    st.markdown('<div class="aw" style="padding-top:.25rem;">', unsafe_allow_html=True)
+    </div>
+    <div class="aw" style="padding-top:.75rem;">""", unsafe_allow_html=True)
     cs = "background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;padding:1.875rem;margin-bottom:1.125rem;box-shadow:0 1px 4px rgba(0,0,0,.06);"
     ct2 = "font-size:.95rem;font-weight:700;color:#111;margin-bottom:.625rem;"
     cp2 = "font-size:.875rem;color:#374151;line-height:1.85;"
