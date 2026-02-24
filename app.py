@@ -398,9 +398,9 @@ div[data-testid="stRadio"]>div>label:has(input:checked){border-color:var(--or)!i
 div[data-testid="stRadio"]>div>label:has(input:checked) p,
 div[data-testid="stRadio"]>div>label:has(input:checked) span{color:var(--or)!important;}
 div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
-/* SMOOTH PAGE FADE TRANSITION */
+/* SMOOTH PAGE FADE TRANSITION — 0.1s barely noticeable */
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-[data-testid="stMainBlockContainer"]>div>div{animation:fadeIn .25s ease both;}
+[data-testid="stMainBlockContainer"]>div>div{animation:fadeIn .1s ease both;}
 
 /* GLOBAL TEXT VISIBILITY — fix any invisible text across the app */
 .stApp *{color:inherit;}
@@ -491,35 +491,36 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
   [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* ── Sign-out door icon button (last column nb7) ── */
+/* ── Sign-out icon button — last column ── */
 [data-testid="stAppViewBlockContainer"]>div:first-child
   [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child{
-  justify-content:center!important;padding:0!important;
-  flex:0 0 44px!important;max-width:44px!important;min-width:44px!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child [data-testid="stButton"]{
-  display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;}
+  justify-content:center!important;padding:0 0 0 6px!important;
+  flex:0 0 46px!important;max-width:46px!important;min-width:46px!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child
   [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button{
   width:36px!important;height:36px!important;min-width:36px!important;max-width:36px!important;
-  border-radius:8px!important;padding:0!important;line-height:1!important;
+  border-radius:8px!important;padding:0!important;
+  background:#fff!important;color:#6b7280!important;
   border:1.5px solid #e5e7eb!important;box-shadow:none!important;
-  background-color:#ffffff!important;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpolyline points='16 17 21 12 16 7'/%3E%3Cline x1='21' y1='12' x2='9' y2='12'/%3E%3C/svg%3E")!important;
-  background-repeat:no-repeat!important;background-position:center!important;background-size:16px 16px!important;
-  font-size:0!important;color:transparent!important;
-  transition:background-color .18s,border-color .18s!important;cursor:pointer!important;}
+  font-size:1rem!important;line-height:36px!important;
+  transition:background .15s,border-color .15s,color .15s!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child
   [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:hover{
-  background-color:#fff7ed!important;border-color:#e84c1e!important;transform:none!important;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e84c1e' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpolyline points='16 17 21 12 16 7'/%3E%3Cline x1='21' y1='12' x2='9' y2='12'/%3E%3C/svg%3E")!important;
-  box-shadow:none!important;}
+  background:#fff7ed!important;border-color:#e84c1e!important;
+  color:#e84c1e!important;transform:none!important;box-shadow:none!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button p,
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button div,
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button span{
+  color:inherit!important;font-size:inherit!important;line-height:inherit!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
 /* PDF banner Change button — vertically centered */
 [data-testid="stButton"]>button{vertical-align:middle!important;}
-/* LAYOUTS */
-.pw{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+/* LAYOUTS — tighter top padding to match SS2 spacing */
+.pw{max-width:900px;margin:0 auto;padding:1rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
 .badge{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.07em;padding:2px 9px;border-radius:999px;}
@@ -879,8 +880,8 @@ with nb6:
         white-space:nowrap;">{S(dname)}</span>
     </div>""", unsafe_allow_html=True)
 with nb7:
-    # Real st.button styled as door-icon via CSS background-image (no text visible)
-    if st.button("signout", key="n_logout", help="Sign out", type="secondary"):
+    # Unicode logout arrow — styled as a clean icon button via CSS above
+    if st.button("⇥", key="n_logout", help="Sign out", type="secondary"):
         for k in list(st.session_state.keys()): del st.session_state[k]
         st.rerun()
 
@@ -1054,13 +1055,13 @@ if cp == "Home":
 # GENERATE PAGE
 # ════════════════════════════════════════════════════════════════
 elif cp == "Generate":
-    st.markdown('<div class="fw" style="padding-top:1rem;">', unsafe_allow_html=True)
-    st.markdown("""<div style="margin-bottom:1.25rem;">
+    st.markdown('<div class="fw" style="padding-top:.5rem;">', unsafe_allow_html=True)
+    st.markdown("""<div style="margin-bottom:1rem;">
       <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;
-        letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Workspace › AI Creation</div>
+        letter-spacing:.1em;color:#9ca3af;margin-bottom:.15rem;">Workspace › AI Creation</div>
       <div style="font-size:1.6rem;font-weight:800;color:#111;letter-spacing:-.03em;">
         Generate Study Material</div>
-      <div style="font-size:.875rem;color:#6b7280;margin-top:.2rem;">
+      <div style="font-size:.875rem;color:#6b7280;margin-top:.15rem;">
         Transform your documents into high-quality assessments instantly.</div>
     </div>""", unsafe_allow_html=True)
 
@@ -1098,9 +1099,9 @@ elif cp == "Generate":
             dd       = st.session_state.detected_difficulty
             dcol     = {"Easy":"#22c55e","Medium":"#e84c1e","Hard":"#ef4444"}.get(dd,"#e84c1e")
 
-            pb1, pb2 = st.columns([5,1])
+            pb1, pb2 = st.columns([5, 1])
             with pb1:
-                st.markdown(f"""<div class="pdf-bn">
+                st.markdown(f"""<div class="pdf-bn" style="margin-bottom:0;">
                   <div class="pdf-ic">📄</div>
                   <div style="flex:1;min-width:0;">
                     <div style="font-size:.9rem;font-weight:700;color:#111;">{S(fn)}</div>
@@ -1108,12 +1109,10 @@ elif cp == "Generate":
                       AI suggests: <span style="color:{dcol};font-weight:700;">{dd}</span></div>
                   </div></div>""", unsafe_allow_html=True)
             with pb2:
-                # vertically center the button with the PDF banner
-                st.markdown("""<div style="display:flex;align-items:center;
-                  height:100%;min-height:64px;">""", unsafe_allow_html=True)
+                st.markdown('<div style="padding-top:8px;">', unsafe_allow_html=True)
                 if st.button("Change", key="chg_pdf", type="secondary", use_container_width=True):
                     clear_pdf(); st.rerun()
-                st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
 
             s1,s2,s3,s4 = st.columns(4)
             for col,lbl,val in [(s1,"Words",f"{wc:,}"),(s2,"Characters",f"{len(pdf_text):,}"),
@@ -1381,7 +1380,7 @@ elif cp in ("Study","Flashcard","Test"):
         if st.button("⚡ Regenerate", type="primary"): go("Generate")
         st.stop()
 
-    st.markdown('<div class="fw" style="padding-top:1rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="fw" style="padding-top:.5rem;">', unsafe_allow_html=True)
 
     tc1,tc2,tc3 = st.columns(3)
     with tc1:
@@ -1731,7 +1730,7 @@ elif cp == "Dashboard":
     best=max((s["pct"] for s in sh),default=0)
     un=st.session_state.current_user or "User"
 
-    st.markdown('<div class="pw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="pw" style="padding-top:.75rem;">', unsafe_allow_html=True)
     greet=f"Welcome back, {un.capitalize()}!" if un!="__guest__" else "Welcome, Guest!"
     st.markdown(f"""<div style="margin-bottom:2rem;">
       <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
@@ -1845,7 +1844,7 @@ elif cp == "Dashboard":
 # ABOUT
 # ════════════════════════════════════════════════════════════════
 elif cp == "About":
-    st.markdown('<div class="aw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="aw" style="padding-top:.75rem;">', unsafe_allow_html=True)
     st.markdown("""<div style="margin-bottom:2rem;">
       <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
         letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">QuizGenius AI › About</div>
