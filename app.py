@@ -461,7 +461,7 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 .stProgress>div{background:#f3f4f6!important;border-radius:999px!important;}
 [data-testid="stExpander"]{background:#fff!important;border:1.5px solid var(--bd)!important;
   border-radius:var(--r)!important;}
-/* NAVBAR STICKY */
+/* ── NAVBAR ── */
 [data-testid="stAppViewBlockContainer"]>div:first-child{
   position:sticky!important;top:0!important;z-index:9999!important;
   background:#fff!important;border-bottom:1px solid var(--bd)!important;
@@ -472,26 +472,35 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]{
   display:flex!important;align-items:center!important;
   padding-top:0!important;padding-bottom:0!important;flex-shrink:0!important;}
-/* Nav link buttons */
-[data-testid="stAppViewBlockContainer"]>div:first-child button{
+/* Nav link buttons — transparent tab style */
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:not(:first-child):not(:last-child) button{
   font-family:'Inter',sans-serif!important;font-size:.82rem!important;font-weight:500!important;
   background:transparent!important;color:var(--tx3)!important;border:none!important;
   border-radius:0!important;box-shadow:none!important;height:64px!important;
   padding:0 10px!important;white-space:nowrap!important;width:auto!important;
   border-bottom:2px solid transparent!important;transition:color .15s,border-color .15s!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child button:hover{
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:not(:first-child):not(:last-child) button:hover{
   color:var(--tx)!important;background:transparent!important;transform:none!important;
   box-shadow:none!important;border-bottom:2px solid var(--bd2)!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]{
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:not(:first-child):not(:last-child) button[kind="primary"]{
   color:var(--or)!important;font-weight:700!important;
   border-bottom:2px solid var(--or)!important;background:transparent!important;box-shadow:none!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]:hover{
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* hide LOGOUT_TRIGGER button visually but keep it functional */
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="column"]:last-child [data-testid="stButton"]{
-  position:absolute!important;width:1px!important;height:1px!important;
-  overflow:hidden!important;opacity:0!important;pointer-events:none!important;clip:rect(0,0,0,0)!important;}
+/* Exit icon button — last column, styled as small icon */
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:last-child{
+  justify-content:center!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:last-child button{
+  width:36px!important;height:36px!important;min-width:36px!important;
+  border-radius:8px!important;padding:0!important;
+  background:#fff!important;color:#374151!important;
+  border:1.5px solid var(--bd)!important;box-shadow:none!important;
+  font-size:1rem!important;line-height:1!important;
+  transition:all .18s!important;display:flex!important;
+  align-items:center!important;justify-content:center!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]>div:last-child button:hover{
+  background:var(--ol)!important;border-color:var(--or)!important;
+  color:var(--or)!important;transform:none!important;box-shadow:none!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
 /* PDF banner Change button — vertically centered */
@@ -799,7 +808,7 @@ is_guest = uname == "__guest__"
 dname    = "Guest" if is_guest else uname.capitalize()
 init     = dname[0].upper()
 
-nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.0,.62,.80,.58,.92,.58,2.2,0.01])
+nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.2, .6, .78, .56, .9, .56, 2.0, 0.38])
 with nb0:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;">
       <div style="width:32px;height:32px;border-radius:8px;background:#e84c1e;
@@ -819,28 +828,17 @@ with nb4:
 with nb5:
     if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary"): go("About")
 with nb6:
-    # Sign out text triggers the hidden 🚪 button via JS key match on data-testid
+    # Avatar + name only — no sign out text
     st.markdown(f"""<div style="display:flex;align-items:center;gap:10px;
-      justify-content:flex-end;height:64px;width:100%;">
+      justify-content:flex-end;height:64px;width:100%;padding-right:6px;">
       <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
         display:flex;align-items:center;justify-content:center;
         font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
       <span style="font-size:.82rem;font-weight:600;color:#374151;white-space:nowrap;">{S(dname)}</span>
-      <div style="width:1px;height:18px;background:#e5e7eb;flex-shrink:0;"></div>
-      <span id="signout-btn"
-        style="font-size:.78rem;font-weight:600;color:#9ca3af;cursor:pointer;
-          white-space:nowrap;transition:color .15s;padding:4px 2px;"
-        onmouseenter="this.style.color='#e84c1e';this.style.textDecoration='underline'"
-        onmouseleave="this.style.color='#9ca3af';this.style.textDecoration='none'"
-        onclick="(function(){{
-          var btns=window.parent.document.querySelectorAll('button');
-          for(var i=0;i<btns.length;i++){{
-            if(btns[i].innerText.trim()==='LOGOUT_TRIGGER'){{btns[i].click();return;}}
-          }}
-        }})()">Sign out</span>
     </div>""", unsafe_allow_html=True)
 with nb7:
-    if st.button("LOGOUT_TRIGGER", key="n_logout", type="secondary"):
+    # Clean exit icon button — styled via CSS nth-child(:last-child)
+    if st.button("⎋", key="n_logout", help="Sign out"):
         for k in list(st.session_state.keys()): del st.session_state[k]
         st.rerun()
 
