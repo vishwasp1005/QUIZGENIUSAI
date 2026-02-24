@@ -38,6 +38,13 @@ def go(p): st.session_state.current_page=p; st.rerun()
 def hash_pw(pw): return hashlib.sha256(pw.encode()).hexdigest()
 def get_key(): return GROQ_API_KEY or st.session_state.get("groq_key_input","")
 
+# ── URL-param logout (triggered by HTML div in navbar) ───────────
+_qp = st.query_params.to_dict()
+if _qp.get("logout") == "1":
+    st.query_params.clear()
+    for k in list(st.session_state.keys()): del st.session_state[k]
+    st.rerun()
+
 def do_login(u,pw):
     users=st.session_state.users
     if u not in users: return False,"User not found."
@@ -491,36 +498,15 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]
   [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* ── Sign-out icon button — last column ── */
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child{
-  justify-content:center!important;padding:0 0 0 6px!important;
-  flex:0 0 46px!important;max-width:46px!important;min-width:46px!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button{
-  width:36px!important;height:36px!important;min-width:36px!important;max-width:36px!important;
-  border-radius:8px!important;padding:0!important;
-  background:#fff!important;color:#6b7280!important;
-  border:1.5px solid #e5e7eb!important;box-shadow:none!important;
-  font-size:1rem!important;line-height:36px!important;
-  transition:background .15s,border-color .15s,color .15s!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:hover{
-  background:#fff7ed!important;border-color:#e84c1e!important;
-  color:#e84c1e!important;transform:none!important;box-shadow:none!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button p,
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button div,
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button span{
-  color:inherit!important;font-size:inherit!important;line-height:inherit!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
 /* PDF banner Change button — vertically centered */
 [data-testid="stButton"]>button{vertical-align:middle!important;}
-/* LAYOUTS — tighter top padding to match SS2 spacing */
-.pw{max-width:900px;margin:0 auto;padding:1rem 1.5rem 5rem;}
+/* Kill Streamlit's injected gap between navbar and first content block */
+[data-testid="stAppViewBlockContainer"]>div:not(:first-child){
+  margin-top:0!important;padding-top:0!important;}
+/* LAYOUTS — zero top padding, content flush with navbar bottom */
+.pw{max-width:900px;margin:0 auto;padding:.75rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
 .badge{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.07em;padding:2px 9px;border-radius:999px;}
@@ -846,9 +832,9 @@ Q_LOGO = """<div style="width:{sz}px;height:{sz}px;border-radius:{r}px;backgroun
 def q_logo(sz=32, r=9, fs="1rem", ltr="Q"):
     return Q_LOGO.format(sz=sz, r=r, fs=fs, ltr=ltr)
 
-# ── door SVG removed — now handled via CSS background-image ──────
+# ── door SVG removed — logout handled via URL param ──────────────
 
-nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.2, .60, .78, .56, .90, .56, 1.85, 0.42])
+nb0,nb1,nb2,nb3,nb4,nb5,nb6 = st.columns([2.2, .60, .78, .56, .90, .56, 2.0])
 with nb0:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;">
       {q_logo(32, 9, "1rem", "Q")}
@@ -870,20 +856,28 @@ with nb4:
 with nb5:
     if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary"): go("About")
 with nb6:
-    # Avatar + display name — right-aligned
+    # Avatar + name + pure HTML sign-out icon — no st.button, no CSS fight
     st.markdown(f"""<div style="display:flex;align-items:center;gap:10px;
-      justify-content:flex-end;height:64px;width:100%;padding-right:4px;">
+      justify-content:flex-end;height:64px;width:100%;padding-right:8px;">
       <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
         display:flex;align-items:center;justify-content:center;
         font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
       <span style="font-size:.82rem;font-weight:600;color:#374151;
         white-space:nowrap;">{S(dname)}</span>
+      <a href="?logout=1" title="Sign out"
+        style="width:34px;height:34px;border-radius:8px;border:1.5px solid #e5e7eb;
+          background:#fff;display:flex;align-items:center;justify-content:center;
+          flex-shrink:0;text-decoration:none;color:#6b7280;transition:all .15s;"
+        onmouseenter="this.style.background='#fff7ed';this.style.borderColor='#e84c1e';this.style.color='#e84c1e'"
+        onmouseleave="this.style.background='#fff';this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </a>
     </div>""", unsafe_allow_html=True)
-with nb7:
-    # Unicode logout arrow — styled as a clean icon button via CSS above
-    if st.button("⇥", key="n_logout", help="Sign out", type="secondary"):
-        for k in list(st.session_state.keys()): del st.session_state[k]
-        st.rerun()
 
 # API key warning (Generate page only)
 if not get_key() and cp == "Generate":
@@ -1055,8 +1049,8 @@ if cp == "Home":
 # GENERATE PAGE
 # ════════════════════════════════════════════════════════════════
 elif cp == "Generate":
-    st.markdown('<div class="fw" style="padding-top:.5rem;">', unsafe_allow_html=True)
-    st.markdown("""<div style="margin-bottom:1rem;">
+    st.markdown('<div class="fw">', unsafe_allow_html=True)
+    st.markdown("""<div style="margin-bottom:1rem;padding-top:.625rem;">
       <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;
         letter-spacing:.1em;color:#9ca3af;margin-bottom:.15rem;">Workspace › AI Creation</div>
       <div style="font-size:1.6rem;font-weight:800;color:#111;letter-spacing:-.03em;">
@@ -1266,9 +1260,9 @@ elif cp == "Generate":
                     st.session_state.generation_done    = True
                     st.rerun()
 
-    # RIGHT PANEL — Live Preview
+    # RIGHT PANEL — Live Preview (sticky, top aligned with breadcrumb)
     with right_col:
-        st.markdown("""<div style="position:sticky;top:68px;margin-top:0;">""", unsafe_allow_html=True)
+        st.markdown("""<div style="position:sticky;top:66px;padding-top:.625rem;">""", unsafe_allow_html=True)
         st.markdown("""<div class="gp">
           <div class="gp-hd">
             <span class="gp-ti">🔍 Live Preview</span>
@@ -1380,8 +1374,8 @@ elif cp in ("Study","Flashcard","Test"):
         if st.button("⚡ Regenerate", type="primary"): go("Generate")
         st.stop()
 
-    st.markdown('<div class="fw" style="padding-top:.5rem;">', unsafe_allow_html=True)
-
+    st.markdown('<div class="fw">', unsafe_allow_html=True)
+    st.markdown('<div style="height:.625rem"></div>', unsafe_allow_html=True)
     tc1,tc2,tc3 = st.columns(3)
     with tc1:
         if st.button("📖  Study",      key="tab_s", type="primary" if cp=="Study"     else "secondary", use_container_width=True): go("Study")
@@ -1730,9 +1724,9 @@ elif cp == "Dashboard":
     best=max((s["pct"] for s in sh),default=0)
     un=st.session_state.current_user or "User"
 
-    st.markdown('<div class="pw" style="padding-top:.75rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="pw">', unsafe_allow_html=True)
     greet=f"Welcome back, {un.capitalize()}!" if un!="__guest__" else "Welcome, Guest!"
-    st.markdown(f"""<div style="margin-bottom:2rem;">
+    st.markdown(f"""<div style="margin-bottom:1.5rem;padding-top:.625rem;">
       <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
         letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">Your Progress › Dashboard</div>
       <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">Learning Dashboard</div>
@@ -1844,8 +1838,8 @@ elif cp == "Dashboard":
 # ABOUT
 # ════════════════════════════════════════════════════════════════
 elif cp == "About":
-    st.markdown('<div class="aw" style="padding-top:.75rem;">', unsafe_allow_html=True)
-    st.markdown("""<div style="margin-bottom:2rem;">
+    st.markdown('<div class="aw">', unsafe_allow_html=True)
+    st.markdown("""<div style="margin-bottom:1.5rem;padding-top:.625rem;">
       <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
         letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">QuizGenius AI › About</div>
       <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">About QuizGenius AI</div>
