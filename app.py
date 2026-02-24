@@ -29,6 +29,7 @@ _D = {
     "detected_difficulty":"Medium","topics":[],"selected_topics":[],"q_type":"MCQ",
     "fc_idx":0,"fc_filter":"All","timed_mode":False,"per_q_time":45,
     "preview_question":None,"show_preview":False,"groq_key_input":"",
+    "_logout_cb":False,
 }
 for k,v in _D.items():
     if k not in st.session_state: st.session_state[k] = v
@@ -38,10 +39,7 @@ def go(p): st.session_state.current_page=p; st.rerun()
 def hash_pw(pw): return hashlib.sha256(pw.encode()).hexdigest()
 def get_key(): return GROQ_API_KEY or st.session_state.get("groq_key_input","")
 
-# ── Session-state flag logout (no URL change, no page reload) ────
-if st.session_state.get("_do_logout"):
-    for k in list(st.session_state.keys()): del st.session_state[k]
-    st.rerun()
+# (logout handled inline by checkbox after navbar — no top-level handler needed)
 
 def do_login(u,pw):
     users=st.session_state.users
@@ -878,8 +876,6 @@ with nb4:
 with nb5:
     if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary"): go("About")
 with nb6:
-    # Avatar + name + pure-HTML logout icon — no st.button → no CSS override
-    # JS finds the hidden button by its unique wrapper id and clicks it (same-page rerun)
     st.markdown(f"""<div style="display:flex;align-items:center;gap:8px;
       justify-content:flex-end;height:64px;width:100%;padding-right:4px;">
       <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
@@ -887,20 +883,18 @@ with nb6:
         font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
       <span style="font-size:.82rem;font-weight:600;color:#374151;
         white-space:nowrap;flex-shrink:0;">{S(dname)}</span>
-      <div id="qg-logout-btn"
+      <div id="qg-signout-icon" title="Sign out"
         onclick="(function(){{
-          var w=window.parent.document.getElementById('qg-logout-trigger');
-          if(w){{var b=w.querySelector('button');if(b){{b.click();return;}}}}
-          var btns=window.parent.document.querySelectorAll('button');
-          for(var i=0;i<btns.length;i++){{
-            if(btns[i].innerText.trim()==='__LGT__'){{btns[i].click();return;}}
-          }}
+          var cb=window.parent.document.querySelector('input[data-testid=\\"stCheckbox\\"][aria-label=\\"_lgcb\\"]');
+          if(!cb)cb=window.parent.document.querySelector('#qg-logout-cb input');
+          if(!cb){{var all=window.parent.document.querySelectorAll('input[type=checkbox]');
+            if(all.length)cb=all[all.length-1];}}
+          if(cb){{cb.click();}}
         }})()"
-        title="Sign out"
         style="width:34px;height:34px;border-radius:8px;border:1.5px solid #e5e7eb;
           background:#fff;display:flex;align-items:center;justify-content:center;
-          flex-shrink:0;cursor:pointer;color:#6b7280;transition:background .15s,
-          border-color .15s,color .15s;"
+          flex-shrink:0;cursor:pointer;color:#6b7280;
+          transition:background .15s,border-color .15s,color .15s;"
         onmouseenter="this.style.background='#fff7ed';this.style.borderColor='#e84c1e';this.style.color='#e84c1e'"
         onmouseleave="this.style.background='#fff';this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -912,12 +906,14 @@ with nb6:
       </div>
     </div>""", unsafe_allow_html=True)
 
-# Hidden logout trigger — unique id wrapper so JS finds it instantly
-st.markdown('<div id="qg-logout-trigger" class="hidden-logout">', unsafe_allow_html=True)
-if st.button("__LGT__", key="n_logout"):
-    st.session_state._do_logout = True
-    st.rerun()
+# ── Invisible checkbox logout ── JS clicks it → Python detects → clear session
+st.markdown('<div id="qg-logout-cb" style="position:fixed;top:-9999px;left:-9999px;'
+            'width:0;height:0;overflow:hidden;pointer-events:none;opacity:0;">', unsafe_allow_html=True)
+_lgcb = st.checkbox("_lgcb", key="_logout_cb", label_visibility="hidden")
 st.markdown('</div>', unsafe_allow_html=True)
+if _lgcb:
+    for k in list(st.session_state.keys()): del st.session_state[k]
+    st.rerun()
 
 # API key warning (Generate page only)
 if not get_key() and cp == "Generate":
@@ -1089,15 +1085,19 @@ if cp == "Home":
 # GENERATE PAGE
 # ════════════════════════════════════════════════════════════════
 elif cp == "Generate":
-    st.markdown('<div class="fw">', unsafe_allow_html=True)
-    st.markdown("""<div style="margin-bottom:1rem;padding-top:.625rem;">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;
-        letter-spacing:.1em;color:#9ca3af;margin-bottom:.15rem;">Workspace › AI Creation</div>
-      <div style="font-size:1.6rem;font-weight:800;color:#111;letter-spacing:-.03em;">
-        Generate Study Material</div>
-      <div style="font-size:.875rem;color:#6b7280;margin-top:.15rem;">
-        Transform your documents into high-quality assessments instantly.</div>
+    # White header band matching home hero start position
+    st.markdown("""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
+      padding:2.5rem 2rem 1.5rem;margin-bottom:0;">
+      <div style="max-width:1280px;margin:0 auto;">
+        <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;
+          letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Workspace › AI Creation</div>
+        <div style="font-size:1.6rem;font-weight:800;color:#111;letter-spacing:-.03em;">
+          Generate Study Material</div>
+        <div style="font-size:.875rem;color:#6b7280;margin-top:.2rem;">
+          Transform your documents into high-quality assessments instantly.</div>
+      </div>
     </div>""", unsafe_allow_html=True)
+    st.markdown('<div class="fw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
 
     left_col, right_col = st.columns([1, 0.52], gap="large")
 
@@ -1300,9 +1300,9 @@ elif cp == "Generate":
                     st.session_state.generation_done    = True
                     st.rerun()
 
-    # RIGHT PANEL — Live Preview (sticky, top aligned with breadcrumb)
+    # RIGHT PANEL — Live Preview (sticky, aligned with left column top)
     with right_col:
-        st.markdown("""<div style="position:sticky;top:66px;padding-top:.625rem;">""", unsafe_allow_html=True)
+        st.markdown("""<div style="position:sticky;top:72px;">""", unsafe_allow_html=True)
         st.markdown("""<div class="gp">
           <div class="gp-hd">
             <span class="gp-ti">🔍 Live Preview</span>
@@ -1764,15 +1764,17 @@ elif cp == "Dashboard":
     best=max((s["pct"] for s in sh),default=0)
     un=st.session_state.current_user or "User"
 
-    st.markdown('<div class="pw">', unsafe_allow_html=True)
-    greet=f"Welcome back, {un.capitalize()}!" if un!="__guest__" else "Welcome, Guest!"
-    st.markdown(f"""<div style="margin-bottom:1.5rem;padding-top:.625rem;">
-      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
-        letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">Your Progress › Dashboard</div>
-      <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">Learning Dashboard</div>
-      <div style="font-size:.875rem;color:#6b7280;margin-top:.375rem;">
-        {S(greet)} Track your study patterns and scores.</div>
+    st.markdown(f"""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
+      padding:2.5rem 1.5rem 1.5rem;">
+      <div style="max-width:900px;margin:0 auto;">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
+          letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">Your Progress › Dashboard</div>
+        <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">Learning Dashboard</div>
+        <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
+          {S(greet)} Track your study patterns and scores.</div>
+      </div>
     </div>""", unsafe_allow_html=True)
+    st.markdown('<div class="pw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
 
     st.markdown(f"""<div class="sg">
       <div class="sc"><span class="sc-ico">📊</span><div class="sc-val">{tt}</div>
@@ -1878,14 +1880,17 @@ elif cp == "Dashboard":
 # ABOUT
 # ════════════════════════════════════════════════════════════════
 elif cp == "About":
-    st.markdown('<div class="aw">', unsafe_allow_html=True)
-    st.markdown("""<div style="margin-bottom:1.5rem;padding-top:.625rem;">
-      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
-        letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">QuizGenius AI › About</div>
-      <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">About QuizGenius AI</div>
-      <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
-        Revolutionising learning through adaptive AI-powered assessments.</div>
+    st.markdown("""<div style="background:#fff;border-bottom:1px solid #e5e7eb;
+      padding:2.5rem 1.5rem 1.5rem;">
+      <div style="max-width:960px;margin:0 auto;">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
+          letter-spacing:.1em;color:#9ca3af;margin-bottom:.2rem;">QuizGenius AI › About</div>
+        <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.03em;">About QuizGenius AI</div>
+        <div style="font-size:.875rem;color:#6b7280;margin-top:.25rem;">
+          Revolutionising learning through adaptive AI-powered assessments.</div>
+      </div>
     </div>""", unsafe_allow_html=True)
+    st.markdown('<div class="aw" style="padding-top:1.5rem;">', unsafe_allow_html=True)
     cs = "background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;padding:1.875rem;margin-bottom:1.125rem;box-shadow:0 1px 4px rgba(0,0,0,.06);"
     ct2 = "font-size:.95rem;font-weight:700;color:#111;margin-bottom:.625rem;"
     cp2 = "font-size:.875rem;color:#374151;line-height:1.85;"
