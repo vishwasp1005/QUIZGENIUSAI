@@ -513,32 +513,35 @@ section[data-testid="stFileUploadDropzone"] p{color:var(--tx2)!important;}
   [data-testid="column"]:not(:first-child):not(:last-child) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
 /* Hide logout block — display:none kills layout space; JS .click() still works on hidden elements */
-/* ── Logout button in nb7 — styled as door icon ── */
+/* ── Logout button in nb7 — white icon button, no background-image tricks ── */
 [data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button{
-  width:34px!important;height:34px!important;min-width:34px!important;
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child{
+  flex:0 0 42px!important;max-width:42px!important;min-width:42px!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button,
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:focus,
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:active{
+  width:34px!important;height:34px!important;min-width:34px!important;max-width:34px!important;
   border-radius:8px!important;border:1.5px solid #e5e7eb!important;
-  background:#fff!important;color:transparent!important;font-size:0!important;
-  padding:0!important;box-shadow:none!important;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpolyline points='16 17 21 12 16 7'/%3E%3Cline x1='21' y1='12' x2='9' y2='12'/%3E%3C/svg%3E")!important;
-  background-repeat:no-repeat!important;background-position:center!important;
-  background-size:15px 15px!important;transition:all .15s!important;transform:none!important;}
+  background-color:#ffffff!important;background:#ffffff!important;
+  color:#6b7280!important;font-size:.85rem!important;line-height:34px!important;
+  padding:0!important;box-shadow:none!important;transform:none!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child
   [data-testid="stHorizontalBlock"] [data-testid="column"]:last-child button:hover{
-  background-color:#fff7ed!important;border-color:#e84c1e!important;transform:none!important;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%23e84c1e' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpolyline points='16 17 21 12 16 7'/%3E%3Cline x1='21' y1='12' x2='9' y2='12'/%3E%3C/svg%3E")!important;
-  background-repeat:no-repeat!important;background-position:center!important;
-  background-size:15px 15px!important;box-shadow:none!important;}
+  background-color:#fff7ed!important;background:#fff7ed!important;
+  border-color:#e84c1e!important;color:#e84c1e!important;
+  transform:none!important;box-shadow:none!important;}
+/* ── Kill gap between header band and content (gap is on the FLEX PARENT) ── */
+section[data-testid="stMain"] [data-testid="stVerticalBlock"]{gap:0!important;}
 /* Generate page columns — align tops */
 .gl>[data-testid="column"]{align-self:start!important;}
-/* Kill ALL Streamlit block gaps between page elements */
+/* Kill ALL Streamlit block gaps */
 [data-testid="stAppViewBlockContainer"]>div:not(:first-child){
   margin-top:0!important;padding-top:0!important;}
 [data-testid="stMainBlockContainer"]{padding-top:0!important;margin-top:0!important;}
 section[data-testid="stMain"]>div{padding-top:0!important;}
-/* Zero gap between consecutive stElementContainer blocks */
-[data-testid="stElementContainer"]{margin-bottom:0!important;}
-[data-testid="stVerticalBlock"]>div{gap:0!important;}
 /* LAYOUTS */
 .pw{max-width:900px;margin:0 auto;padding:.5rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
@@ -899,8 +902,7 @@ with nb6:
         white-space:nowrap;flex-shrink:0;">{S(dname)}</span>
     </div>""", unsafe_allow_html=True)
 with nb7:
-    # Real st.button — CSS above styles it as a door icon, hides text
-    if st.button("·", key="n_logout", help="Sign out", type="secondary"):
+    if st.button("→", key="n_logout", help="Sign out", type="secondary"):
         for k in list(st.session_state.keys()): del st.session_state[k]
         st.rerun()
 
