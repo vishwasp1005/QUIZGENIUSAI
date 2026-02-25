@@ -352,12 +352,21 @@ CSS = """
 #MainMenu,footer,header,.stDeployButton{visibility:hidden!important;display:none!important;}
 [data-testid="collapsedControl"],section[data-testid="stSidebar"]{display:none!important;}
 .stApp>header{display:none!important;height:0!important;}
-html,body,.stApp,.main,.block-container,
+html,body,.stApp,.main,
 [data-testid="stAppViewBlockContainer"],[data-testid="stAppViewContainer"],
 div[class*="block-container"]{padding-top:0!important;margin-top:0!important;}
-[data-testid="stMainBlockContainer"]{padding-top:0!important;padding-left:0!important;padding-right:0!important;margin-top:0!important;}
-section.main>div:first-child{padding-top:0!important;margin-top:0!important;}
-.block-container{max-width:100%!important;padding-bottom:0!important;}
+/* Kill Streamlit's default block padding/gap completely */
+[data-testid="stMainBlockContainer"]{
+  padding-top:0!important;padding-bottom:0!important;
+  padding-left:0!important;padding-right:0!important;margin:0!important;}
+.block-container{
+  max-width:100%!important;padding:0!important;margin:0!important;}
+/* Kill the automatic gap Streamlit injects between navbar block and next block */
+[data-testid="stAppViewBlockContainer"]>div:nth-child(2){
+  margin-top:0!important;padding-top:0!important;}
+section.main>div:first-child,
+section[data-testid="stMain"]{
+  padding-top:0!important;margin-top:0!important;gap:0!important;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:#f3f4f6;}
 ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:999px;}
@@ -427,44 +436,95 @@ div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
 .stProgress>div{background:#f3f4f6!important;border-radius:999px!important;}
 [data-testid="stExpander"]{background:#fff!important;border:1.5px solid var(--bd)!important;
   border-radius:var(--r)!important;}
-/* NAVBAR STICKY */
+/* ── NAVBAR ─────────────────────────────────────────────────── */
+/* Outer sticky wrapper */
 [data-testid="stAppViewBlockContainer"]>div:first-child{
   position:sticky!important;top:0!important;z-index:9999!important;
   background:#fff!important;border-bottom:1px solid var(--bd)!important;
   box-shadow:0 1px 8px rgba(0,0,0,.06)!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="stHorizontalBlock"]{
-  align-items:center!important;padding:0 2rem!important;min-height:64px!important;
-  gap:0!important;max-width:1400px!important;margin:0 auto!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]{
+/* Horizontal block = the row that holds logo | nav | user */
+[data-testid="stAppViewBlockContainer"]>div:first-child>[data-testid="stHorizontalBlock"]{
+  align-items:stretch!important;padding:0 1.5rem!important;min-height:64px!important;
+  gap:0!important;max-width:100%!important;margin:0!important;}
+/* Every outer column: stretch to full height, center children */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]{
   display:flex!important;align-items:center!important;
-  padding-top:0!important;padding-bottom:0!important;flex-shrink:0!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child button{
+  padding-top:0!important;padding-bottom:0!important;}
+/* Inner nav column — contains 5 sub-columns, centred */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(2){
+  justify-content:center!important;}
+/* The inner 5-column row inside the nav column */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(2)
+  [data-testid="stHorizontalBlock"]{
+  align-items:center!important;gap:0!important;padding:0!important;
+  min-height:64px!important;width:100%!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(2)
+  [data-testid="column"]{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:0!important;}
+/* All nav buttons (inside the center column) */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(2) button{
   font-family:'Inter',sans-serif!important;font-size:.82rem!important;font-weight:500!important;
-  background:transparent!important;color:var(--tx3)!important;border:none!important;
-  border-radius:0!important;box-shadow:none!important;height:64px!important;
-  padding:0 14px!important;white-space:nowrap!important;width:auto!important;
-  border-bottom:2px solid transparent!important;transition:color .15s,border-color .15s!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child button:hover{
+  background:transparent!important;color:var(--tx3)!important;
+  border:none!important;border-radius:0!important;box-shadow:none!important;
+  height:64px!important;padding:0 8px!important;white-space:nowrap!important;
+  width:100%!important;border-bottom:2px solid transparent!important;
+  transition:color .15s,border-color .15s!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(2) button:hover{
   color:var(--tx)!important;background:transparent!important;transform:none!important;
   box-shadow:none!important;border-bottom:2px solid var(--bd2)!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]{
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(2) button[kind="primary"]{
   color:var(--or)!important;font-weight:700!important;
-  border-bottom:2px solid var(--or)!important;background:transparent!important;box-shadow:none!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]:hover{
+  border-bottom:2px solid var(--or)!important;
+  background:transparent!important;box-shadow:none!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(2) button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* Sign Out button — looks like plain text, not a nav tab */
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]:last-child button{
-  height:auto!important;padding:4px 8px!important;border-radius:6px!important;
+/* User column — right-aligned */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(3){
+  justify-content:flex-end!important;gap:6px!important;flex-direction:column!important;
+  align-items:flex-end!important;padding-right:4px!important;}
+/* Sign-out button in user col */
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(3) button{
+  height:auto!important;padding:3px 6px!important;border-radius:5px!important;
   font-size:.72rem!important;font-weight:600!important;color:#9ca3af!important;
   background:transparent!important;border:none!important;box-shadow:none!important;
   border-bottom:none!important;width:auto!important;min-width:0!important;
-  transition:color .15s,background .15s!important;line-height:1.4!important;}
-[data-testid="stAppViewBlockContainer"]>div:first-child [data-testid="column"]:last-child button:hover{
+  line-height:1.4!important;transition:color .15s,background .15s!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  >[data-testid="stHorizontalBlock"]>[data-testid="column"]:nth-child(3) button:hover{
   color:#e84c1e!important;background:rgba(232,76,30,.06)!important;
-  border-bottom:none!important;transform:none!important;box-shadow:none!important;}
+  transform:none!important;box-shadow:none!important;}
+/* Navbar HTML element classes */
+.nb-logo{display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;}
+.nb-q{width:32px;height:32px;border-radius:9px;background:#e84c1e;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:1rem;font-weight:900;color:#fff;letter-spacing:-.04em;
+  font-family:'Inter',system-ui,sans-serif;line-height:1;
+  box-shadow:0 4px 14px rgba(232,76,30,.35);}
+.nb-brand{line-height:1.2;}
+.nb-name{font-size:.88rem;font-weight:800;color:#111;letter-spacing:-.02em;white-space:nowrap;}
+.nb-accent{color:#e84c1e;}
+.nb-sub{font-size:.5rem;font-weight:600;color:#9ca3af;
+  text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;}
+.nb-user{display:flex;align-items:center;gap:7px;justify-content:flex-end;
+  height:40px;width:100%;}
+.nb-av{width:28px;height:28px;border-radius:50%;background:#e84c1e;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:800;color:#fff;flex-shrink:0;}
+.nb-uname{font-size:.8rem;font-weight:600;color:#374151;white-space:nowrap;}
 /* LAYOUTS */
-.pw{max-width:900px;margin:0 auto;padding:1.5rem 1.5rem 5rem;}
-.fw{max-width:1280px;margin:0 auto;padding:1.5rem 2rem 5rem;}
+.pw{max-width:900px;margin:0 auto;padding:1.25rem 1.5rem 5rem;}
+.fw{max-width:1280px;margin:0 auto;padding:1.25rem 2rem 5rem;}
 .badge{display:inline-flex;align-items:center;font-size:.6rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.07em;padding:2px 9px;border-radius:999px;}
 .b-or{background:var(--ol);color:var(--or);border:1px solid var(--om);}
@@ -676,7 +736,7 @@ div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
 .tdc-ico.h{background:#fef2f2;border:1px solid #fecaca;}
 .tdc-n{font-size:1rem;font-weight:700;margin-bottom:.25rem;}
 .tdc-h{font-size:.75rem;color:var(--tx3);line-height:1.65;}
-.aw{max-width:960px;margin:0 auto;padding:1.5rem 1.5rem 5rem;}
+.aw{max-width:960px;margin:0 auto;padding:1.25rem 1.5rem 5rem;}
 @media(max-width:900px){
   .gl{grid-template-columns:1fr;}.hi{grid-template-columns:1fr;}
   .hh1{font-size:2.25rem;}.hwg,.dfg,.ft-top,.tdg,.fg,.sg{grid-template-columns:1fr;}
@@ -765,42 +825,36 @@ is_guest = uname == "__guest__"
 dname    = "Guest" if is_guest else uname.capitalize()
 init     = dname[0].upper()
 
-nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([1.7,.52,.74,.52,.84,.52,1.3,.52])
-with nb0:
-    st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;">
-      <div style="width:32px;height:32px;border-radius:9px;background:#e84c1e;
-        display:flex;align-items:center;justify-content:center;flex-shrink:0;
-        box-shadow:0 4px 14px rgba(232,76,30,.35);">
-        <span style="font-size:1rem;font-weight:900;color:#fff;letter-spacing:-.04em;
-          font-family:'Inter',system-ui,sans-serif;line-height:1;">Q</span></div>
-      <div style="line-height:1.15;">
-        <div style="font-size:.88rem;font-weight:800;color:#111;letter-spacing:-.02em;white-space:nowrap;">
-          QuizGenius <span style="color:#e84c1e;">AI</span></div>
-        <div style="font-size:.5rem;font-weight:600;color:#9ca3af;
-          text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;">AI Study Platform</div>
+# ── NAVBAR: logo | nav-center | user ──────────────────────────────
+nb_logo, nb_nav, nb_user = st.columns([2, 5, 2])
+
+with nb_logo:
+    st.markdown(f"""<div class="nb-logo">
+      <div class="nb-q">Q</div>
+      <div class="nb-brand">
+        <div class="nb-name">QuizGenius <span class="nb-accent">AI</span></div>
+        <div class="nb-sub">AI Study Platform</div>
       </div>
     </div>""", unsafe_allow_html=True)
-with nb1:
-    if st.button("Home",      key="n_home",  type="primary" if cp=="Home"                         else "secondary"): go("Home")
-with nb2:
-    if st.button("Generate",  key="n_gen",   type="primary" if cp=="Generate"                     else "secondary"): go("Generate")
-with nb3:
-    if st.button("Study",     key="n_study", type="primary" if cp in("Study","Flashcard","Test")  else "secondary", disabled=not gen_ok): go("Study")
-with nb4:
-    if st.button("Dashboard", key="n_dash",  type="primary" if cp=="Dashboard"                    else "secondary"): go("Dashboard")
-with nb5:
-    if st.button("About",     key="n_about", type="primary" if cp=="About"                        else "secondary"): go("About")
-with nb6:
-    # Avatar + name — pure display, no interaction
-    st.markdown(f"""<div style="display:flex;align-items:center;gap:8px;
-      justify-content:flex-end;height:64px;width:100%;padding-right:4px;">
-      <div style="width:30px;height:30px;border-radius:50%;background:#e84c1e;
-        display:flex;align-items:center;justify-content:center;
-        font-size:.72rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
-      <span style="font-size:.8rem;font-weight:600;color:#374151;white-space:nowrap;">{S(dname)}</span>
+
+with nb_nav:
+    n1, n2, n3, n4, n5 = st.columns(5)
+    with n1:
+        if st.button("Home",      key="n_home",  type="primary" if cp=="Home"                        else "secondary", use_container_width=True): go("Home")
+    with n2:
+        if st.button("Generate",  key="n_gen",   type="primary" if cp=="Generate"                    else "secondary", use_container_width=True): go("Generate")
+    with n3:
+        if st.button("Study",     key="n_study", type="primary" if cp in("Study","Flashcard","Test") else "secondary", use_container_width=True, disabled=not gen_ok): go("Study")
+    with n4:
+        if st.button("Dashboard", key="n_dash",  type="primary" if cp=="Dashboard"                   else "secondary", use_container_width=True): go("Dashboard")
+    with n5:
+        if st.button("About",     key="n_about", type="primary" if cp=="About"                       else "secondary", use_container_width=True): go("About")
+
+with nb_user:
+    st.markdown(f"""<div class="nb-user">
+      <div class="nb-av">{init}</div>
+      <span class="nb-uname">{S(dname)}</span>
     </div>""", unsafe_allow_html=True)
-with nb7:
-    # Real Streamlit button styled as text — no JS, no hidden columns
     if st.button("Sign out", key="n_signout", type="secondary"):
         do_logout()
 
