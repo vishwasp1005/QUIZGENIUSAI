@@ -434,11 +434,31 @@ div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
   border-bottom:2px solid var(--or)!important;background:transparent!important;box-shadow:none!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* hide real logout */
+/* hide real logout — collapse column entirely */
 [data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="column"]:last-child [data-testid="stButton"]{
-  position:absolute!important;width:1px!important;height:1px!important;
+  [data-testid="column"]:last-child{
+  width:0!important;min-width:0!important;max-width:0!important;
+  overflow:hidden!important;padding:0!important;margin:0!important;flex:0 0 0!important;}
+[data-testid="stAppViewBlockContainer"]>div:first-child
+  [data-testid="column"]:last-child *{
+  position:absolute!important;width:0!important;height:0!important;
   overflow:hidden!important;opacity:0!important;pointer-events:none!important;clip:rect(0,0,0,0)!important;}
+/* RADIO — explicit text color so test options always visible */
+div[data-testid="stRadio"]>div>label{color:var(--tx2)!important;}
+div[data-testid="stRadio"]>div>label:hover{color:var(--or)!important;}
+div[data-testid="stRadio"]>div>label:has(input:checked){color:var(--or)!important;}
+/* File uploader — force white background */
+[data-testid="stFileUploader"]{background:#fff!important;border:2px dashed #d1d5db!important;border-radius:12px!important;}
+[data-testid="stFileUploader"] *{background:#fff!important;}
+[data-testid="stFileUploaderDropzone"]{background:#fff!important;}
+[data-testid="stFileUploaderDropzone"] p,
+[data-testid="stFileUploaderDropzone"] span{color:#374151!important;}
+[data-testid="stFileUploaderDropzone"] small{color:#6b7280!important;}
+[data-testid="stFileUploaderDropzone"] button{background:#e84c1e!important;color:#fff!important;border:none!important;border-radius:8px!important;}
+/* PAGE TRANSITION — slide in from right */
+@keyframes pgSlideIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:translateX(0);}}
+section[data-testid="stMain"] [data-testid="stVerticalBlock"]>div{
+  animation:pgSlideIn .18s cubic-bezier(.25,.8,.25,1);}
 /* LAYOUTS */
 .pw{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
@@ -770,11 +790,6 @@ div[data-testid="stRadio"]>div>label>div:first-child{display:none!important;}
   border-bottom:2px solid var(--or)!important;background:transparent!important;box-shadow:none!important;}
 [data-testid="stAppViewBlockContainer"]>div:first-child button[kind="primary"]:hover{
   transform:none!important;background:transparent!important;box-shadow:none!important;}
-/* hide real logout */
-[data-testid="stAppViewBlockContainer"]>div:first-child
-  [data-testid="column"]:last-child [data-testid="stButton"]{
-  position:absolute!important;width:1px!important;height:1px!important;
-  overflow:hidden!important;opacity:0!important;pointer-events:none!important;clip:rect(0,0,0,0)!important;}
 /* LAYOUTS */
 .pw{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
 .fw{max-width:1280px;margin:0 auto;padding:0 2rem 5rem;}
@@ -1014,7 +1029,7 @@ if not st.session_state.logged_in:
         <div style="text-align:center;margin-bottom:1.75rem;">
           <div style="width:64px;height:64px;border-radius:16px;background:#e84c1e;
             display:flex;align-items:center;justify-content:center;font-size:2rem;
-            margin:0 auto 1rem;box-shadow:0 8px 24px rgba(232,76,30,.35);">══</div>
+            margin:0 auto 1rem;box-shadow:0 8px 24px rgba(232,76,30,.35);">Q</div>
           <div style="font-size:1.75rem;font-weight:800;color:#111;letter-spacing:-.04em;margin-bottom:.25rem;">
             QuizGenius AI</div>
           <div style="font-size:.875rem;color:#6b7280;line-height:1.7;max-width:280px;margin:0 auto;">
@@ -1078,7 +1093,7 @@ is_guest = uname == "__guest__"
 dname    = "Guest" if is_guest else uname.capitalize()
 init     = dname[0].upper()
 
-nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([2.2,.72,.95,.68,1.05,.68,2.6,0.01])
+nb0,nb1,nb2,nb3,nb4,nb5,nb6,nb7 = st.columns([1.8,.55,.78,.55,.88,.55,1.4,0.001])
 with nb0:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:9px;height:64px;white-space:nowrap;">
       <div style="width:32px;height:32px;border-radius:9px;background:#e84c1e;
@@ -1105,17 +1120,16 @@ with nb5:
     if st.button("About",     key="n_about", type="primary" if cp=="About"                        else "secondary"): go("About")
 with nb6:
     st.markdown(f"""<div style="display:flex;align-items:center;gap:8px;
-      justify-content:flex-end;height:64px;width:100%;">
-      <div style="background:#e84c1e;color:#fff;border-radius:999px;
-        padding:.3rem .875rem;font-size:.72rem;font-weight:700;white-space:nowrap;">⬆ Upgrade Pro</div>
-      <div style="width:1px;height:20px;background:#e5e7eb;margin:0 4px;"></div>
-      <div style="width:32px;height:32px;border-radius:50%;background:#e84c1e;
+      justify-content:flex-end;height:64px;width:100%;padding-right:4px;">
+      <div style="width:30px;height:30px;border-radius:50%;background:#e84c1e;
         display:flex;align-items:center;justify-content:center;
-        font-size:.75rem;font-weight:800;color:#fff;">{init}</div>
+        font-size:.72rem;font-weight:800;color:#fff;flex-shrink:0;">{init}</div>
       <span style="font-size:.8rem;font-weight:600;color:#374151;white-space:nowrap;">{S(dname)}</span>
-      <div style="width:1px;height:16px;background:#e5e7eb;margin:0 2px;"></div>
-      <span style="font-size:.72rem;font-weight:600;color:#9ca3af;cursor:pointer;white-space:nowrap;"
-        onmouseenter="this.style.color='#e84c1e'" onmouseleave="this.style.color='#9ca3af'"
+      <span style="font-size:.72rem;font-weight:600;color:#9ca3af;cursor:pointer;
+        white-space:nowrap;border-left:1px solid #e5e7eb;padding-left:8px;
+        transition:color .15s;"
+        onmouseenter="this.style.color='#e84c1e'"
+        onmouseleave="this.style.color='#9ca3af'"
         onclick="(function(){{var b=window.parent.document.querySelectorAll('button');
           for(var i=0;i<b.length;i++){{if(b[i].innerText.trim()==='_lo_'){{b[i].click();break;}}}}}})()">
         Sign out</span>
@@ -1131,7 +1145,7 @@ if not get_key() and cp == "Generate":
       padding:.875rem 1.375rem;margin:1rem 2rem;font-size:.875rem;color:#92400e;">
       ⚠️ <strong>Groq API key not set.</strong> Add <code>GROQ_API_KEY</code> in Render environment.
     </div>""", unsafe_allow_html=True)
-    with st.expander("══ Enter Groq API Key (session only)"):
+    with st.expander("🔑 Enter Groq API Key (session only)"):
         ki = st.text_input("Key", type="password", placeholder="gsk_...", label_visibility="collapsed")
         if ki: st.session_state.groq_key_input = ki; st.success("Saved for this session.")
 
@@ -1169,11 +1183,11 @@ if cp == "Home":
         border:1.5px solid #f3f4f6;border-radius:8px;">D) Break down waste via autophagy</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;margin-top:.875rem;">
         <div style="background:#f9fafb;color:#6b7280;border-radius:7px;padding:.45rem;
-          text-align:center;font-size:.58rem;font-weight:700;border:1.5px solid #e5e7eb;">══ Study</div>
+          text-align:center;font-size:.58rem;font-weight:700;border:1.5px solid #e5e7eb;">📚 Study</div>
         <div style="background:#e84c1e;color:#fff;border-radius:7px;padding:.45rem;
-          text-align:center;font-size:.58rem;font-weight:700;">══ Cards</div>
+          text-align:center;font-size:.58rem;font-weight:700;">🃏 Cards</div>
         <div style="background:#f0fdf4;color:#16a34a;border-radius:7px;padding:.45rem;
-          text-align:center;font-size:.58rem;font-weight:700;border:1.5px solid #bbf7d0;">══ Test</div>
+          text-align:center;font-size:.58rem;font-weight:700;border:1.5px solid #bbf7d0;">✏️ Test</div>
       </div></div>"""
 
     st.markdown(f"""<div class="hs"><div class="hi">
@@ -1183,17 +1197,19 @@ if cp == "Home":
         <p class="hp">QuizGenius AI transforms your study material into adaptive flashcards,
         MCQs, True/False, and fill-in-the-blank quizzes — powered by Groq's Llama 3.1.</p>
         <div class="pr">
-          <div class="pi">══ PDF &amp; OCR</div><div class="pi">══ Flashcards</div>
-          <div class="pi">⏱ Timed Tests</div><div class="pi">══ Analytics</div>
+          <div class="pi">📄 PDF &amp; OCR</div><div class="pi">🃏 Flashcards</div>
+          <div class="pi">⏱ Timed Tests</div><div class="pi">📊 Analytics</div>
         </div>
       </div><div>{mockup}</div>
     </div></div>""", unsafe_allow_html=True)
 
+    st.markdown('<div style="max-width:1280px;margin:0 auto;padding:1.5rem 2rem 0;">', unsafe_allow_html=True)
     hb1,hb2,hb3 = st.columns([1,1.4,1.1])
     with hb2:
         if st.button("⚡  Start Generating Now", key="hcta", type="primary", use_container_width=True): go("Generate")
     with hb3:
-        if st.button("══  My Dashboard", key="hdash", type="secondary", use_container_width=True): go("Dashboard")
+        if st.button("📊  My Dashboard", key="hdash", type="secondary", use_container_width=True): go("Dashboard")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown(f"""<div class="sb"><div class="si">
       <div class="si-c"><span class="si-n">{tqg if tqg else "10K+"}</span><span class="si-l">Questions Generated</span></div>
@@ -1207,13 +1223,13 @@ if cp == "Home":
       <div class="sec-ti">Three steps to smarter study</div>
       <p class="sec-su">Upload any PDF, let AI generate questions, then study and test yourself.</p>
       <div class="hwg">
-        <div class="hwc" data-n="1"><div class="hwi">══</div>
+        <div class="hwc" data-n="1"><div class="hwi">⬆️</div>
           <div class="hwt">1. Upload Your PDF</div>
           <p class="hwp">Drag and drop any study material. OCR handles scanned documents automatically.</p></div>
-        <div class="hwc" data-n="2"><div class="hwi">══</div>
+        <div class="hwc" data-n="2"><div class="hwi">⚡</div>
           <div class="hwt">2. AI Generates Questions</div>
           <p class="hwp">Groq-powered Llama 3.1 extracts key concepts and creates questions in seconds.</p></div>
-        <div class="hwc" data-n="3"><div class="hwi">══</div>
+        <div class="hwc" data-n="3"><div class="hwi">📖</div>
           <div class="hwt">3. Study &amp; Excel</div>
           <p class="hwp">Flip flashcards, bookmark tough spots, take timed tests, and track improvement.</p></div>
       </div></div></div>""", unsafe_allow_html=True)
@@ -1223,25 +1239,25 @@ if cp == "Home":
       <div class="sec-ti">Everything you need to excel</div>
       <p class="sec-su">Built for serious learners and exam preparation.</p>
       <div class="fg" style="margin-top:2rem;">
-        <div class="fcc"><div class="fci">══</div><div><div class="fct">Flashcard Mode</div>
+        <div class="fcc"><div class="fci">🃏</div><div><div class="fct">Flashcard Mode</div>
           <div class="fcs">3D flip cards with progress tracking and bookmarks.</div></div></div>
         <div class="fcc"><div class="fci">⭐</div><div><div class="fct">Smart Bookmarks</div>
           <div class="fcs">Star tough questions and revisit them anytime.</div></div></div>
-        <div class="fcc"><div class="fci">══</div><div><div class="fct">Auto Difficulty Detection</div>
+        <div class="fcc"><div class="fci">🎯</div><div><div class="fct">Auto Difficulty Detection</div>
           <div class="fcs">AI analyses your PDF and recommends the right level.</div></div></div>
         <div class="fcc"><div class="fci">❌</div><div><div class="fct">Wrong Answer Tracker</div>
           <div class="fcs">Mistakes are saved so you can target weak spots.</div></div></div>
         <div class="fcc"><div class="fci">⏱</div><div><div class="fct">Per-Question Timer</div>
           <div class="fcs">Countdown per question to simulate real exam pressure.</div></div></div>
-        <div class="fcc"><div class="fci">══</div><div><div class="fct">Score History &amp; Chart</div>
+        <div class="fcc"><div class="fci">📈</div><div><div class="fct">Score History &amp; Chart</div>
           <div class="fcs">Track every test and visualise improvement over time.</div></div></div>
-        <div class="fcc"><div class="fci">══️</div><div><div class="fct">Topic Filter</div>
+        <div class="fcc"><div class="fci">📂</div><div><div class="fct">Topic Filter</div>
           <div class="fcs">Focus generation on specific chapters or sections.</div></div></div>
-        <div class="fcc"><div class="fci">══</div><div><div class="fct">3 Question Types</div>
+        <div class="fcc"><div class="fci">❓</div><div><div class="fct">3 Question Types</div>
           <div class="fcs">MCQ, True/False, or Fill-in-the-blank.</div></div></div>
-        <div class="fcc"><div class="fci">══</div><div><div class="fct">Live Preview</div>
+        <div class="fcc"><div class="fci">👁</div><div><div class="fct">Live Preview</div>
           <div class="fcs">Preview a real question before generating the full set.</div></div></div>
-        <div class="fcc"><div class="fci">══</div><div><div class="fct">Export as HTML</div>
+        <div class="fcc"><div class="fci">⬇️</div><div><div class="fct">Export as HTML</div>
           <div class="fcs">Download a formatted quiz sheet for offline study.</div></div></div>
       </div></div></div>""", unsafe_allow_html=True)
 
@@ -1252,15 +1268,15 @@ if cp == "Home":
       <div class="dfg">
         <div class="dfc e">
           <span class="badge b-gr">Foundational</span>
-          <div class="dfn">══ Easy</div>
+          <div class="dfn">🟢 Easy</div>
           <p class="dfd">Direct recall, key terminology, foundational concepts. 5 test questions.</p></div>
         <div class="dfc m">
           <span class="badge b-or">Intermediate</span>
-          <div class="dfn">══ Medium</div>
+          <div class="dfn">🟡 Medium</div>
           <p class="dfd">Applied comprehension, connecting concepts. 7 test questions.</p></div>
         <div class="dfc h">
           <span class="badge b-re">Mastery</span>
-          <div class="dfn">══ Hard</div>
+          <div class="dfn">🔴 Hard</div>
           <p class="dfd">Advanced synthesis and critical analysis. 10 questions.</p></div>
       </div></div></div>""", unsafe_allow_html=True)
 
@@ -1268,7 +1284,7 @@ if cp == "Home":
       <div class="ft-top">
         <div>
           <div class="ft-brand">
-            <div class="ft-logo">══</div><span class="ft-name">QuizGenius AI</span></div>
+            <div class="ft-logo">Q</div><span class="ft-name">QuizGenius AI</span></div>
           <p class="ft-desc">Transform any PDF into an adaptive learning experience.
             Powered by Groq + Llama 3.1.</p></div>
         <div><div class="ft-hd">Product</div>
@@ -1291,7 +1307,7 @@ if cp == "Home":
 # GENERATE PAGE
 # ════════════════════════════════════════════════════════════════
 elif cp == "Generate":
-    st.markdown('<div class="fw" style="padding-top:2rem;">', unsafe_allow_html=True)
+    st.markdown('<div class="fw" style="padding-top:1rem;">', unsafe_allow_html=True)
     st.markdown("""<div style="margin-bottom:1.5rem;">
       <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;
         letter-spacing:.1em;color:#9ca3af;margin-bottom:.25rem;">Workspace › AI Creation</div>
@@ -1306,7 +1322,7 @@ elif cp == "Generate":
     with left_col:
         if not st.session_state.pdf_text.strip():
             st.markdown('<div class="cfg">', unsafe_allow_html=True)
-            st.markdown("""<div class="cfg-lbl">══ Upload PDF or Document</div>
+            st.markdown("""<div class="cfg-lbl">📄 Upload PDF or Document</div>
             <div class="cfg-hint">Drag and drop your lecture notes, textbooks, or research papers.</div>
             """, unsafe_allow_html=True)
             uf = st.file_uploader("Upload PDF", type="pdf", label_visibility="collapsed")
@@ -1335,10 +1351,10 @@ elif cp == "Generate":
             dd       = st.session_state.detected_difficulty
             dcol     = {"Easy":"#22c55e","Medium":"#e84c1e","Hard":"#ef4444"}.get(dd,"#e84c1e")
 
-            pb1, pb2 = st.columns([5,1])
+            pb1, pb2 = st.columns([5,1], vertical_alignment="center")
             with pb1:
                 st.markdown(f"""<div class="pdf-bn">
-                  <div class="pdf-ic">══</div>
+                  <div class="pdf-ic">📄</div>
                   <div style="flex:1;min-width:0;">
                     <div style="font-size:.9rem;font-weight:700;color:#111;">{S(fn)}</div>
                     <div style="font-size:.72rem;color:#9ca3af;margin-top:.125rem;">{wc:,} words · {sz:.1f} KB ·
@@ -1361,7 +1377,7 @@ elif cp == "Generate":
                     </div>""", unsafe_allow_html=True)
 
             if st.session_state.topics:
-                with st.expander(f"══️ Topic Filter — {len(st.session_state.topics)} sections detected"):
+                with st.expander(f"📂 Topic Filter — {len(st.session_state.topics)} sections detected"):
                     st.caption("Select sections to focus on. Leave empty for full document.")
                     sel = st.multiselect("Topics", st.session_state.topics,
                                          default=st.session_state.selected_topics,
@@ -1388,7 +1404,7 @@ elif cp == "Generate":
             cqt = st.session_state.q_type
             qa1,qa2,qa3 = st.columns(3)
             for col,qt,ico,lbl,sub in [
-                (qa1,"MCQ","══","Multiple Choice","4 options, 1 correct"),
+                (qa1,"MCQ","❓","Multiple Choice","4 options, 1 correct"),
                 (qa2,"TF","✅","True / False","Fact-based statements"),
                 (qa3,"FIB","✏️","Fill in Blank","Complete the sentence")]:
                 with col:
@@ -1410,7 +1426,7 @@ elif cp == "Generate":
                         unsafe_allow_html=True)
             cur_d = st.session_state.detected_difficulty
             d1,d2,d3 = st.columns(3)
-            for col,dname,ico in [(d1,"Easy","══"),(d2,"Medium","══"),(d3,"Hard","══")]:
+            for col,dname,ico in [(d1,"Easy","🟢"),(d2,"Medium","🟡"),(d3,"Hard","🔴")]:
                 with col:
                     sel_cls = {"Easy":"border:1.5px solid #22c55e;background:#f0fdf4;",
                                "Medium":"border:1.5px solid #e84c1e;background:#fff7ed;",
@@ -1437,7 +1453,7 @@ elif cp == "Generate":
                 qt_label = {"MCQ":"Multiple Choice","TF":"True/False","FIB":"Fill-in-the-Blank"}.get(
                     st.session_state.q_type,"")
                 st.success(f"✅ Generated {len(st.session_state.questions)} {qt_label} questions!")
-                if st.button("══  Open Study Mode →", type="secondary",
+                if st.button("📖  Open Study Mode →", type="secondary",
                               use_container_width=True, key="open_study_final"):
                     go("Study")
 
@@ -1502,10 +1518,10 @@ elif cp == "Generate":
 
     # RIGHT PANEL — Live Preview
     with right_col:
-        st.markdown("""<div style="position:sticky;top:80px;">""", unsafe_allow_html=True)
+        st.markdown("""<div style="position:sticky;top:70px;">""", unsafe_allow_html=True)
         st.markdown("""<div class="gp">
           <div class="gp-hd">
-            <span class="gp-ti">══ Live Preview</span>
+            <span class="gp-ti">🔍 Live Preview</span>
             <span class="badge b-or">SAMPLE</span>
           </div>""", unsafe_allow_html=True)
 
@@ -1539,20 +1555,20 @@ elif cp == "Generate":
                         </div>""", unsafe_allow_html=True)
                 st.markdown("""<div style="margin:1rem 1.25rem 1.25rem;padding:.625rem .875rem;
                   background:#f9fafb;border-radius:8px;font-size:.72rem;color:#6b7280;">
-                  ══ This is a real sample question from your document.</div>""",
+                  ℹ️ This is a real sample question from your document.</div>""",
                     unsafe_allow_html=True)
-                if st.button("══ New Preview", key="new_prev", type="secondary",
+                if st.button("🔄 New Preview", key="new_prev", type="secondary",
                               use_container_width=True):
                     st.session_state.show_preview = False
                     st.session_state.preview_question = None
                     st.rerun()
             else:
                 st.markdown("""<div class="gp-em">
-                  <div class="gp-em-ic">══</div>
+                  <div class="gp-em-ic">👁</div>
                   <div class="gp-em-t">No content generated</div>
                   <div class="gp-em-s">Click Preview Sample to see<br>a real question from your document.</div>
                 </div>""", unsafe_allow_html=True)
-                if st.button("══  Preview Sample Question", type="secondary",
+                if st.button("👁  Preview Sample Question", type="secondary",
                               use_container_width=True, key="prev_btn"):
                     if not get_key():
                         st.error("Add your Groq API key first.")
@@ -1577,14 +1593,14 @@ elif cp == "Generate":
                                 st.error(f"Preview failed: {e}")
         else:
             st.markdown("""<div class="gp-em">
-              <div class="gp-em-ic">══</div>
+              <div class="gp-em-ic">👁</div>
               <div class="gp-em-t">Upload a PDF first</div>
               <div class="gp-em-s">Upload a document on the left<br>to enable live preview.</div>
             </div>""", unsafe_allow_html=True)
 
         st.markdown("""<div style="padding:.875rem 1.25rem;border-top:1px solid #f3f4f6;
           background:#fffbeb;border-radius:0 0 12px 12px;">
-          <div style="font-size:.72rem;font-weight:700;color:#d97706;margin-bottom:.25rem;">══ Pro Tip</div>
+          <div style="font-size:.72rem;font-weight:700;color:#d97706;margin-bottom:.25rem;">💡 Pro Tip</div>
           <div style="font-size:.7rem;color:#92400e;line-height:1.65;">
             For best results, upload text-heavy PDFs. Diagrams and handwritten notes may vary.</div>
         </div></div></div>""", unsafe_allow_html=True)
@@ -1599,7 +1615,7 @@ elif cp in ("Study","Flashcard","Test"):
         st.markdown("""<div style="max-width:500px;margin:5rem auto;text-align:center;padding:2rem;">
           <div style="width:72px;height:72px;border-radius:50%;background:#fff7ed;
             border:1.5px solid #fed7aa;display:flex;align-items:center;justify-content:center;
-            font-size:2rem;margin:0 auto 1.25rem;">══</div>
+            font-size:2rem;margin:0 auto 1.25rem;">📚</div>
           <div style="font-size:1.375rem;font-weight:800;color:#111;margin-bottom:.5rem;">No Questions Yet</div>
           <div style="font-size:.875rem;color:#6b7280;margin-bottom:2rem;">Upload a PDF and generate questions first.</div>
         </div>""", unsafe_allow_html=True)
@@ -1618,11 +1634,11 @@ elif cp in ("Study","Flashcard","Test"):
 
     tc1,tc2,tc3 = st.columns(3)
     with tc1:
-        if st.button("══  Study",      key="tab_s", type="primary" if cp=="Study"     else "secondary", use_container_width=True): go("Study")
+        if st.button("📚  Study",      key="tab_s", type="primary" if cp=="Study"     else "secondary", use_container_width=True): go("Study")
     with tc2:
-        if st.button("══  Flashcards", key="tab_f", type="primary" if cp=="Flashcard" else "secondary", use_container_width=True): go("Flashcard")
+        if st.button("🃏  Flashcards", key="tab_f", type="primary" if cp=="Flashcard" else "secondary", use_container_width=True): go("Flashcard")
     with tc3:
-        if st.button("══  Test",       key="tab_t", type="primary" if cp=="Test"      else "secondary", use_container_width=True):
+        if st.button("✏️  Test",       key="tab_t", type="primary" if cp=="Test"      else "secondary", use_container_width=True):
             st.session_state.selected_difficulty = None
             st.session_state.has_test_generated  = False
             st.session_state.user_answers        = {}
@@ -1646,11 +1662,11 @@ elif cp in ("Study","Flashcard","Test"):
             fm = st.selectbox("Filter",["All","Bookmarked","Wrong Answers"],
                                label_visibility="collapsed",key="sf")
         with sh3:
-            st.download_button("══ Export",
+            st.download_button("⬇️ Export",
                 export_html(qs,f"QuizGenius — {fn}").encode(),
                 f"quiz_{fn.replace('.pdf','')}.html","text/html",use_container_width=True)
 
-        with st.expander("══ Copy all questions as text"):
+        with st.expander("📋 Copy all questions as text"):
             st.code("\n\n".join(
                 f"Q{i+1}: {q['question']}\n"+"".join(f"  {o}\n" for o in q['options'])+
                 f"  Answer: {q['correct']}" for i,q in enumerate(qs)),language=None)
@@ -1747,7 +1763,7 @@ elif cp in ("Study","Flashcard","Test"):
                 if st.button("← Prev", key="fp", type="secondary", use_container_width=True):
                     st.session_state.fc_idx=(idx-1)%total; st.rerun()
             with n2:
-                if st.button("══ Random", key="fr", type="secondary", use_container_width=True):
+                if st.button("🔀 Random", key="fr", type="secondary", use_container_width=True):
                     import random; st.session_state.fc_idx=random.randint(0,total-1); st.rerun()
             with n3:
                 if st.button("Next →", key="fn", type="secondary", use_container_width=True):
@@ -1770,7 +1786,7 @@ elif cp in ("Study","Flashcard","Test"):
             st.markdown("""<div style="background:#eff6ff;border:1px solid #bfdbfe;
               border-radius:10px;padding:.875rem 1.375rem;margin-bottom:1.25rem;
               font-size:.875rem;color:#1e40af;">
-              ══ Test questions are generated fresh via Groq — separate from your study set.
+              ℹ️ Test questions are generated fresh via Groq — separate from your study set.
             </div>""", unsafe_allow_html=True)
             tm1,tm2 = st.columns([2,2])
             with tm1:
@@ -1787,26 +1803,26 @@ elif cp in ("Study","Flashcard","Test"):
               <div style="font-size:.875rem;color:#6b7280;">Fresh questions are generated for each level.</div>
             </div>""", unsafe_allow_html=True)
             st.markdown("""<div class="tdg">
-              <div class="tdc"><div class="tdc-ico e">══</div>
+              <div class="tdc"><div class="tdc-ico e">🟢</div>
                 <div class="tdc-n">Beginner</div>
                 <div class="tdc-h">Foundational concepts and direct recall. 5 questions.</div></div>
               <div class="tdc feat"><span class="tdc-pop">POPULAR</span>
-                <div class="tdc-ico m">══</div>
+                <div class="tdc-ico m">🟡</div>
                 <div class="tdc-n">Standard</div>
                 <div class="tdc-h">Applied comprehension scenarios. 7 questions.</div></div>
-              <div class="tdc"><div class="tdc-ico h">══</div>
+              <div class="tdc"><div class="tdc-ico h">🔴</div>
                 <div class="tdc-n">Expert</div>
                 <div class="tdc-h">Complex synthesis and analysis. 10 questions.</div></div>
             </div>""", unsafe_allow_html=True)
             d1,d2,d3 = st.columns(3)
             with d1:
-                if st.button("══ Start Easy",   key="easy", use_container_width=True, type="secondary"):
+                if st.button("🟢 Start Easy",   key="easy", use_container_width=True, type="secondary"):
                     st.session_state.selected_difficulty="Easy"; st.session_state.test_started_at=int(time.time()*1000); st.rerun()
             with d2:
-                if st.button("══ Start Medium", key="med",  use_container_width=True, type="primary"):
+                if st.button("🟡 Start Medium", key="med",  use_container_width=True, type="primary"):
                     st.session_state.selected_difficulty="Medium"; st.session_state.test_started_at=int(time.time()*1000); st.rerun()
             with d3:
-                if st.button("══ Start Hard",   key="hard", use_container_width=True, type="secondary"):
+                if st.button("🔴 Start Hard",   key="hard", use_container_width=True, type="secondary"):
                     st.session_state.selected_difficulty="Hard"; st.session_state.test_started_at=int(time.time()*1000); st.rerun()
 
         elif not st.session_state.has_test_generated:
@@ -1820,7 +1836,7 @@ elif cp in ("Study","Flashcard","Test"):
                   padding:2.5rem;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);">
                   <div style="width:56px;height:56px;border-radius:50%;background:#fff7ed;
                     border:1.5px solid #fed7aa;display:flex;align-items:center;justify-content:center;
-                    font-size:1.5rem;margin:0 auto 1rem;">══</div>
+                    font-size:1.5rem;margin:0 auto 1rem;">⚡</div>
                   <div style="font-size:1.125rem;font-weight:800;color:#111;margin-bottom:.375rem;">
                     Generating {diff} Test</div>
                   <div style="font-size:.875rem;color:#6b7280;">Creating {n} fresh questions via Groq Llama 3.1…</div>
@@ -1913,7 +1929,7 @@ elif cp in ("Study","Flashcard","Test"):
             st.markdown("""<div style="background:#fff;border:1.5px solid #e5e7eb;
               border-radius:14px;overflow:hidden;margin-top:.75rem;">
               <div style="padding:1.25rem;border-bottom:1px solid #f3f4f6;">
-                <div style="font-size:.9rem;font-weight:700;color:#111;">══ Detailed Review</div></div>
+                <div style="font-size:.9rem;font-weight:700;color:#111;">📋 Detailed Review</div></div>
               <div style="padding:.875rem 1.25rem;">""", unsafe_allow_html=True)
             for i,q in enumerate(st.session_state.test_questions):
                 ua=st.session_state.user_answers.get(i); ok=ua==q["correct"]
@@ -1937,18 +1953,18 @@ elif cp in ("Study","Flashcard","Test"):
             st.markdown('</div></div>', unsafe_allow_html=True)
             r1,r2,r3,r4 = st.columns(4)
             with r1:
-                if st.button("══ Retake", use_container_width=True, type="secondary"):
+                if st.button("🔄 Retake", use_container_width=True, type="secondary"):
                     st.session_state.user_answers={}; st.session_state.test_submitted=False
                     st.session_state.quiz_key+=1; st.rerun()
             with r2:
-                if st.button("══ New Level", use_container_width=True, type="primary"):
+                if st.button("⬆️ New Level", use_container_width=True, type="primary"):
                     st.session_state.selected_difficulty=None
                     st.session_state.has_test_generated=False
                     st.session_state.user_answers={}; st.session_state.test_submitted=False; st.rerun()
             with r3:
-                if st.button("══ Flashcards", use_container_width=True, type="secondary"): go("Flashcard")
+                if st.button("🃏 Flashcards", use_container_width=True, type="secondary"): go("Flashcard")
             with r4:
-                if st.button("══ Dashboard",  use_container_width=True, type="secondary"): go("Dashboard")
+                if st.button("📊 Dashboard",  use_container_width=True, type="secondary"): go("Dashboard")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -1973,11 +1989,11 @@ elif cp == "Dashboard":
     </div>""", unsafe_allow_html=True)
 
     st.markdown(f"""<div class="sg">
-      <div class="sc"><span class="sc-ico">══</span><div class="sc-val">{tt}</div>
+      <div class="sc"><span class="sc-ico">📊</span><div class="sc-val">{tt}</div>
         <div class="sc-lbl">Tests Taken</div></div>
-      <div class="sc"><span class="sc-ico">══</span><div class="sc-val">{avg}%</div>
+      <div class="sc"><span class="sc-ico">🎯</span><div class="sc-val">{avg}%</div>
         <div class="sc-lbl">Avg Score</div></div>
-      <div class="sc"><span class="sc-ico">══</span><div class="sc-val">{best}%</div>
+      <div class="sc"><span class="sc-ico">🏆</span><div class="sc-val">{best}%</div>
         <div class="sc-lbl">Best Score</div></div>
       <div class="sc"><span class="sc-ico">⭐</span><div class="sc-val">{len(bms)}</div>
         <div class="sc-lbl">Bookmarks</div></div>
@@ -1986,7 +2002,7 @@ elif cp == "Dashboard":
     d1,d2 = st.columns(2)
     with d1:
         st.markdown(f"""<div class="sc" style="margin-bottom:.875rem;">
-          <span class="sc-ico">══</span><div class="sc-val">{len(qs)}</div>
+          <span class="sc-ico">❓</span><div class="sc-val">{len(qs)}</div>
           <div class="sc-lbl">Questions Generated</div></div>""", unsafe_allow_html=True)
     with d2:
         st.markdown(f"""<div class="sc" style="margin-bottom:.875rem;">
@@ -1994,22 +2010,22 @@ elif cp == "Dashboard":
           <div class="sc-lbl">Mistakes Tracked</div></div>""", unsafe_allow_html=True)
 
     if len(sh)>=2:
-        st.markdown('<div class="ds-t">══ Score Trend</div>', unsafe_allow_html=True)
+        st.markdown('<div class="ds-t">📈 Score Trend</div>', unsafe_allow_html=True)
         st.markdown('<div class="ch-w">', unsafe_allow_html=True)
         render_score_chart(sh)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown('<div class="ds-t">══️ Score History</div>', unsafe_allow_html=True)
+    st.markdown('<div class="ds-t">📊 Score History</div>', unsafe_allow_html=True)
     if not sh:
         st.markdown("""<div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;
           padding:3rem;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-          <div style="font-size:2.5rem;margin-bottom:.75rem;">══</div>
+          <div style="font-size:2.5rem;margin-bottom:.75rem;">📭</div>
           <div style="font-size:.95rem;font-weight:700;color:#111;">No tests taken yet</div>
           <div style="font-size:.82rem;color:#9ca3af;margin-top:.375rem;">Complete a test to see your history here.</div>
         </div>""", unsafe_allow_html=True)
         _,bc,_ = st.columns([1,1,1])
         with bc:
-            if st.button("══ Take a Test Now", type="primary", use_container_width=True): go("Test")
+            if st.button("✏️ Take a Test Now", type="primary", use_container_width=True): go("Test")
     else:
         for e in reversed(sh):
             pc=e["pct"]; bcol="#22c55e" if pc>=80 else "#e84c1e" if pc>=60 else "#ef4444"
@@ -2028,7 +2044,7 @@ elif cp == "Dashboard":
             </div>""", unsafe_allow_html=True)
         _,cl,_ = st.columns([1,1,1])
         with cl:
-            if st.button("══ Clear History", type="secondary", use_container_width=True):
+            if st.button("🗑️ Clear History", type="secondary", use_container_width=True):
                 st.session_state.score_history=[]; persist(); st.rerun()
 
     if was:
@@ -2044,9 +2060,9 @@ elif cp == "Dashboard":
         if len(was)>5: st.caption(f"+ {len(was)-5} more. See all in Study → Wrong Answers.")
         w1,w2=st.columns(2)
         with w1:
-            if st.button("══ Review Wrong Answers",  type="secondary", use_container_width=True): go("Study")
+            if st.button("❌ Review Wrong Answers",  type="secondary", use_container_width=True): go("Study")
         with w2:
-            if st.button("══ Flashcard Mistakes", type="secondary", use_container_width=True):
+            if st.button("🃏 Flashcard Mistakes", type="secondary", use_container_width=True):
                 st.session_state.fc_filter="Mistakes"; go("Flashcard")
 
     if bms:
@@ -2058,12 +2074,12 @@ elif cp == "Dashboard":
                   <div class="rv-q">{S(qs[bi]['question'])}</div>
                 </div>""", unsafe_allow_html=True)
         if len(bms)>3: st.caption(f"+ {len(bms)-3} more bookmarks.")
-        if st.button("══ Study Bookmarks", type="secondary"): go("Study")
+        if st.button("📚 Study Bookmarks", type="secondary"): go("Study")
 
     if un=="__guest__":
         st.markdown("""<div style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;
           padding:1rem 1.375rem;font-size:.875rem;color:#92400e;margin-top:1.25rem;">
-          ══ <strong>Guest mode</strong> — data resets on page refresh. Create an account to keep data.</div>""",
+          ℹ️ <strong>Guest mode</strong> — data resets on page refresh. Create an account to keep data.</div>""",
             unsafe_allow_html=True)
         _,bc3,_ = st.columns([1,1,1])
         with bc3:
@@ -2090,12 +2106,12 @@ elif cp == "About":
     a1,a2 = st.columns(2)
     with a1:
         st.markdown(f"""<div style="{cs}">
-          <div style="{ct2}">══ Our Mission</div>
+          <div style="{ct2}">🎯 Our Mission</div>
           <p style="{cp2}">QuizGenius AI empowers students and professionals to study smarter.
           Groq-powered Llama 3.1 generates adaptive quizzes with real-time progress tracking.
           Fast, free, and deployed on Render.</p></div>""", unsafe_allow_html=True)
         st.markdown(f"""<div style="{cs}">
-          <div style="{ct2}">══ Technology Stack</div>
+          <div style="{ct2}">🚀 Technology Stack</div>
           <p style="{cp2}">
             <strong style="color:#e84c1e;">Llama 3.1</strong> — via Groq API (llama-3.1-8b-instant)<br>
             <strong style="color:#e84c1e;">LangChain</strong> — document splitting<br>
@@ -2107,14 +2123,14 @@ elif cp == "About":
         st.markdown(f"""<div style="{cs}">
           <div style="{ct2}">✨ Key Features</div>
           <p style="{cp2}">
-            ══ Flashcard mode with 3D flip<br>⭐ Bookmark questions<br>
-            ══ Auto difficulty detection<br>❌ Wrong answer tracker<br>
-            ⏱ Per-question timed mode<br>══ Score history + chart<br>
-            ══️ Topic / chapter filter<br>══ MCQ / True-False / Fill-in-Blank<br>
-            ══ Live preview before generation<br>══ Export as formatted HTML<br>
+            🃏 Flashcard mode with 3D flip<br>⭐ Bookmark questions<br>
+            🎯 Auto difficulty detection<br>❌ Wrong answer tracker<br>
+            ⏱ Per-question timed mode<br>📈 Score history + chart<br>
+            📂 Topic / chapter filter<br>❓ MCQ / True-False / Fill-in-Blank<br>
+            👁 Live preview before generation<br>⬇️ Export as formatted HTML<br>
             ⚡ Groq-powered speed</p></div>""", unsafe_allow_html=True)
         st.markdown(f"""<div style="{cs}">
-          <div style="{ct2}">══ Connect</div>
+          <div style="{ct2}">📧 Connect</div>
           <a href="https://www.linkedin.com/in/vishwas-patel-ba91a2288/" target="_blank"
             style="display:flex;align-items:center;gap:.75rem;padding:.625rem .875rem;
             background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;
